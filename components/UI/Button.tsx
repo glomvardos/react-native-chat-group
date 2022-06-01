@@ -1,16 +1,21 @@
-import { Text, Pressable, StyleSheet, View, Platform } from 'react-native'
+import { Text, Pressable, StyleSheet, View, Platform, ActivityIndicator } from 'react-native'
 import Colors from '../../constants/colors'
 
 interface Props {
   text: string
+  isLoading: boolean
   onPressHandler: () => void
 }
 
-const Button = ({ text, onPressHandler }: Props) => {
+const Button = ({ text, isLoading, onPressHandler }: Props) => {
   return (
     <View style={styles.container}>
       <Pressable style={styles.button} onPress={onPressHandler}>
-        <Text style={styles.text}>{text}</Text>
+        {isLoading ? (
+          <ActivityIndicator size='small' color='#fff' />
+        ) : (
+          <Text style={styles.text}>{text}</Text>
+        )}
       </Pressable>
     </View>
   )

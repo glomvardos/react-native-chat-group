@@ -1,23 +1,32 @@
 import { useFormik } from 'formik'
-import { StyleSheet, View } from 'react-native'
-import * as yup from 'yup'
+import { useState } from 'react'
+import { Alert, StyleSheet, View } from 'react-native'
 import Button from '../components/UI/Button'
 import TextField from '../components/UI/TextField'
 import TextFieldLabel from '../components/UI/TextFieldLabel'
 import TextTitle from '../components/UI/TextTitle'
 import Colors from '../constants/colors'
+import auth from '../services/auth'
+import validationSchema from '../utils/validation-schema'
 
 const LoginScreen = () => {
+  const [isLoading, setIsLoading] = useState<boolean>(false)
   const formik = useFormik({
     initialValues: {
       email: '',
       password: '',
     },
-    validationSchema: yup.object({
-      email: yup.string().email('Invalid email').required('Email is required'),
-      password: yup.string().required('Password is required'),
-    }),
-    onSubmit: values => {},
+    validationSchema: validationSchema.login,
+    onSubmit: async values => {
+      setIsLoading(true)
+      auth
+        .signin({ password: values.password.trim(), email: values.email.trim() })
+        .then(res => {
+          console.log(res)
+        })
+        .catch(error => Alert.alert('Error', error.message))
+        .finally(() => setIsLoading(false))
+    },
   })
 
   return (
@@ -42,7 +51,7 @@ const LoginScreen = () => {
           onBlur={formik.handleBlur('password')}
           value={formik.values.password}
         />
-        <Button text='Login' onPressHandler={formik.handleSubmit} />
+        <Button text='Login' isLoading={isLoading} onPressHandler={formik.handleSubmit} />
       </View>
     </View>
   )
