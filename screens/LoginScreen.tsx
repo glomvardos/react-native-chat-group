@@ -6,10 +6,12 @@ import TextField from '../components/UI/TextField'
 import TextFieldLabel from '../components/UI/TextFieldLabel'
 import TextTitle from '../components/UI/TextTitle'
 import Colors from '../constants/colors'
+import { useAuthContext } from '../context/auth'
 import auth from '../services/auth'
 import validationSchema from '../utils/validation-schema'
 
 const LoginScreen = () => {
+  const { storeToken } = useAuthContext()
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const formik = useFormik({
     initialValues: {
@@ -22,7 +24,7 @@ const LoginScreen = () => {
       auth
         .signin({ password: values.password.trim(), email: values.email.trim() })
         .then(res => {
-          console.log(res)
+          storeToken(res?.data.access)
         })
         .catch(error => Alert.alert('Error', error.message))
         .finally(() => setIsLoading(false))

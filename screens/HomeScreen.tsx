@@ -1,13 +1,10 @@
-import { SafeAreaView, StyleSheet, StatusBar, Platform, View } from 'react-native'
-import Header from '../components/Home/Header'
+import { SafeAreaView, StyleSheet, Text, StatusBar, Platform, View, Pressable } from 'react-native'
 import Colors from '../constants/colors'
 
 const HomeScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
-      <View>
-        <Header />
-      </View>
+      <View></View>
     </SafeAreaView>
   )
 }

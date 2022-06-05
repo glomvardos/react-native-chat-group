@@ -1,11 +1,22 @@
 import { View, Text, StyleSheet, Pressable } from 'react-native'
 import { Feather } from '@expo/vector-icons'
 import Colors from '../../constants/colors'
+import { SimpleLineIcons } from '@expo/vector-icons'
 
-const Header = () => {
+interface Props {
+  text: String
+  handleDrawer: () => void
+}
+
+const Header = ({ text, handleDrawer }: Props) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Channels</Text>
+      <View style={styles.menu}>
+        <Pressable onPress={handleDrawer}>
+          <SimpleLineIcons name='menu' size={24} color='white' />
+        </Pressable>
+        <Text style={styles.text}>{text}</Text>
+      </View>
       <Pressable style={styles.button}>
         <Feather name='plus' size={24} color='#fff' />
       </Pressable>
@@ -22,10 +33,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 20,
   },
+  menu: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   text: {
     color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
+    marginLeft: 10,
   },
   button: {
     backgroundColor: Colors.darkGray,

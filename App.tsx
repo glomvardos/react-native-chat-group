@@ -1,22 +1,25 @@
-import { NavigationContainer } from '@react-navigation/native'
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { StatusBar } from 'expo-status-bar'
-import HomeScreen from './screens/HomeScreen'
-import LoginScreen from './screens/LoginScreen'
+import AuthProvider from './context/auth'
+import Routes from './Routes/Routes'
+import * as SplashScreen from 'expo-splash-screen'
+import { useEffect } from 'react'
 
-const Stack = createNativeStackNavigator()
+SplashScreen.preventAutoHideAsync()
+  .then(result => console.log(`SplashScreen.preventAutoHideAsync() succeeded: ${result}`))
+  .catch(console.warn)
 
 const App = () => {
+  useEffect(() => {
+    setTimeout(async () => {
+      await SplashScreen.hideAsync()
+    }, 2000)
+  }, [])
+
   return (
-    <>
+    <AuthProvider>
       <StatusBar style='light' />
-      <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName='Login'>
-          <Stack.Screen name='Home' component={HomeScreen} />
-          <Stack.Screen name='Login' component={LoginScreen} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </>
+      <Routes />
+    </AuthProvider>
   )
 }
 
