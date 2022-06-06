@@ -17,7 +17,7 @@ const CustomSnackbar = () => {
     if (snackbarState.showSnackbar) {
       const timerId = setTimeout(() => {
         dispatch({ type: SnackbarStates.CLOSE, payload: { message: '' } })
-      }, 3000)
+      }, snackbarState.duration)
 
       return () => clearTimeout(timerId)
     }
