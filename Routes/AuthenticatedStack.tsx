@@ -1,15 +1,41 @@
-import { createDrawerNavigator } from '@react-navigation/drawer'
+import {
+  createDrawerNavigator,
+  DrawerContentScrollView,
+  DrawerItem,
+  DrawerItemList,
+} from '@react-navigation/drawer'
 import { StyleSheet, Pressable, Platform } from 'react-native'
 import { Feather } from '@expo/vector-icons'
 import HomeScreen from '../screens/HomeScreen'
 import Colors from '../constants/colors'
 import navigationStyles from '../constants/navigationStyles'
+import { MaterialIcons } from '@expo/vector-icons'
 
 const Drawer = createDrawerNavigator()
 
-const AuthenticatedStack = () => {
+interface Props {
+  logout: () => void
+}
+
+const AuthenticatedStack = ({ logout }: Props) => {
   return (
-    <Drawer.Navigator initialRouteName='Home' screenOptions={navigationStyles}>
+    <Drawer.Navigator
+      initialRouteName='Home'
+      screenOptions={navigationStyles}
+      drawerContent={props => {
+        return (
+          <DrawerContentScrollView {...props}>
+            <DrawerItemList {...props} />
+            <DrawerItem
+              label='Log out'
+              onPress={logout}
+              labelStyle={{ color: '#fff' }}
+              icon={() => <MaterialIcons name='logout' size={24} color='#fff' />}
+            />
+          </DrawerContentScrollView>
+        )
+      }}
+    >
       <Drawer.Screen
         name='Home'
         component={HomeScreen}

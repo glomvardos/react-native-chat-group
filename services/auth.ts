@@ -31,7 +31,6 @@ class Auth {
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const serverError = error as AxiosError<ServerError>
-        console.log(serverError.response?.data)
         if (serverError && serverError.response?.status === 401) {
           throw new Error(serverError.response.data.message)
         } else {

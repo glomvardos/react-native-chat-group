@@ -4,10 +4,10 @@ import AuthenticatedStack from './AuthenticatedStack'
 import UnAuthenticatedStack from './UnAuthenticatedStack'
 
 const Routes = () => {
-  const { token } = useAuthContext()
+  const { token, logout } = useAuthContext()
   return (
     <NavigationContainer>
-      {token && <AuthenticatedStack />}
+      {token && <AuthenticatedStack logout={logout} />}
       {!token && <UnAuthenticatedStack />}
     </NavigationContainer>
   )

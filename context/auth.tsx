@@ -39,7 +39,7 @@ const AuthProvider = ({ children }: Props) => {
   useEffect(() => {
     getToken()
   }, [])
-  console.log(token)
+
   const ctx = {
     token,
     storeToken,

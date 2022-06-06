@@ -25,7 +25,7 @@ export default Button
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 'auto',
+    marginTop: 10,
     flexDirection: 'row',
     justifyContent: 'center',
   },

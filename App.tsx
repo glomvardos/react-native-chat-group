@@ -3,6 +3,8 @@ import AuthProvider from './context/auth'
 import Routes from './Routes/Routes'
 import * as SplashScreen from 'expo-splash-screen'
 import { useEffect } from 'react'
+import SnackbarProvider from './context/snackbar'
+import CustomSnackbar from './components/UI/CustomSnackbar'
 
 SplashScreen.preventAutoHideAsync()
   .then(result => console.log(`SplashScreen.preventAutoHideAsync() succeeded: ${result}`))
@@ -17,8 +19,11 @@ const App = () => {
 
   return (
     <AuthProvider>
-      <StatusBar style='light' />
-      <Routes />
+      <SnackbarProvider>
+        <StatusBar style='light' />
+        <Routes />
+        <CustomSnackbar />
+      </SnackbarProvider>
     </AuthProvider>
   )
 }
