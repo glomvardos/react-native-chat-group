@@ -1,19 +1,21 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Alert } from 'react-native'
 
 import { useFormik } from 'formik'
+import { useSetRecoilState } from 'recoil'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import AuthFormContainer from '../components/UI/AuthFormContainer'
 import Button from '../components/UI/Button'
 import LoginSignupLink from '../components/UI/LoginSignupLink'
 import TextField from '../components/UI/TextField'
 import TextFieldLabel from '../components/UI/TextFieldLabel'
-import { useAuthContext } from '../context/auth'
 import auth from '../services/auth'
 import validationSchema from '../utils/validation-schema'
+import { saveToken } from '../store/auth'
 
 const LoginScreen = () => {
-  const { storeToken } = useAuthContext()
+  const setToken = useSetRecoilState(saveToken)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const formik = useFormik({
     initialValues: {
@@ -25,13 +27,18 @@ const LoginScreen = () => {
       setIsLoading(true)
       auth
         .signin({ password: values.password.trim(), email: values.email.trim() })
-        .then(res => {
-          storeToken(res?.data.access)
+        .then(async res => {
+          await AsyncStorage.setItem('token', res?.data.access)
+          setToken(res?.data.access)
         })
         .catch(error => Alert.alert('Error', error.message))
         .finally(() => setIsLoading(false))
     },
   })
+
+  useEffect(() => {
+    return () => setIsLoading(false)
+  }, [])
 
   return (
     <AuthFormContainer>

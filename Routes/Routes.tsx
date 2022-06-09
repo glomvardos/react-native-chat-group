@@ -1,14 +1,17 @@
 import { NavigationContainer } from '@react-navigation/native'
-import { useAuthContext } from '../context/auth'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { clearToken, token } from '../store/auth'
 import AuthenticatedStack from './AuthenticatedStack'
 import UnAuthenticatedStack from './UnAuthenticatedStack'
 
 const Routes = () => {
-  const { token, logout } = useAuthContext()
+  const accessToken = useRecoilValue(token)
+  const logout = useSetRecoilState(clearToken)
+
   return (
     <NavigationContainer>
-      {token && <AuthenticatedStack logout={logout} />}
-      {!token && <UnAuthenticatedStack />}
+      {accessToken && <AuthenticatedStack logout={() => logout(null)} />}
+      {!accessToken && <UnAuthenticatedStack />}
     </NavigationContainer>
   )
 }

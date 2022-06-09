@@ -1,4 +1,5 @@
-import { SafeAreaView, StyleSheet, Text, StatusBar, Platform, View, Pressable } from 'react-native'
+import { SafeAreaView, StyleSheet, StatusBar, Platform, View } from 'react-native'
+
 import Colors from '../constants/colors'
 
 const HomeScreen = () => {

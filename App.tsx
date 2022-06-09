@@ -1,10 +1,10 @@
 import { StatusBar } from 'expo-status-bar'
-import AuthProvider from './context/auth'
 import Routes from './Routes/Routes'
 import * as SplashScreen from 'expo-splash-screen'
 import { useEffect } from 'react'
 import SnackbarProvider from './context/snackbar'
 import CustomSnackbar from './components/UI/CustomSnackbar'
+import { RecoilRoot } from 'recoil'
 
 SplashScreen.preventAutoHideAsync()
   .then(result => console.log(`SplashScreen.preventAutoHideAsync() succeeded: ${result}`))
@@ -18,13 +18,13 @@ const App = () => {
   }, [])
 
   return (
-    <AuthProvider>
+    <RecoilRoot>
       <SnackbarProvider>
         <StatusBar style='light' />
         <Routes />
         <CustomSnackbar />
       </SnackbarProvider>
-    </AuthProvider>
+    </RecoilRoot>
   )
 }
 

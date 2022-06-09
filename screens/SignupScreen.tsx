@@ -1,20 +1,21 @@
-import { useNavigation } from '@react-navigation/native'
-import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { useState } from 'react'
 import { Alert } from 'react-native'
+
 import { useFormik } from 'formik'
+import { useNavigation } from '@react-navigation/native'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 
 import AuthFormContainer from '../components/UI/AuthFormContainer'
 import Button from '../components/UI/Button'
 import LoginSignupLink from '../components/UI/LoginSignupLink'
 import TextField from '../components/UI/TextField'
 import TextFieldLabel from '../components/UI/TextFieldLabel'
-import auth from '../services/auth'
-import validationSchema from '../utils/validation-schema'
+
 import { RootStackParams } from '../Routes/UnAuthenticatedStack'
 import { useSnackbarContext } from '../context/snackbar'
 import { SnackbarStates } from '../enums/snackbar'
-import Colors from '../constants/colors'
+import validationSchema from '../utils/validation-schema'
+import auth from '../services/auth'
 
 const SignupScreen = () => {
   const { dispatch } = useSnackbarContext()

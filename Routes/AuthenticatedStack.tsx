@@ -5,11 +5,14 @@ import {
   DrawerItemList,
 } from '@react-navigation/drawer'
 import { StyleSheet, Pressable, Platform } from 'react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Feather } from '@expo/vector-icons'
+import { MaterialIcons } from '@expo/vector-icons'
+
 import HomeScreen from '../screens/HomeScreen'
+
 import Colors from '../constants/colors'
 import navigationStyles from '../constants/navigationStyles'
-import { MaterialIcons } from '@expo/vector-icons'
 
 const Drawer = createDrawerNavigator()
 
@@ -18,6 +21,10 @@ interface Props {
 }
 
 const AuthenticatedStack = ({ logout }: Props) => {
+  const onLogout = async () => {
+    await AsyncStorage.removeItem('token')
+    logout()
+  }
   return (
     <Drawer.Navigator
       initialRouteName='Home'
@@ -28,7 +35,7 @@ const AuthenticatedStack = ({ logout }: Props) => {
             <DrawerItemList {...props} />
             <DrawerItem
               label='Log out'
-              onPress={logout}
+              onPress={onLogout}
               labelStyle={{ color: '#fff' }}
               icon={() => <MaterialIcons name='logout' size={24} color='#fff' />}
             />
