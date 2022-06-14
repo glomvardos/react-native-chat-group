@@ -14,6 +14,7 @@ export default TextField
 
 const styles = StyleSheet.create({
   input: {
+    width: '100%',
     backgroundColor: '#fff',
     borderColor: Colors.darkGray,
     borderWidth: 1,

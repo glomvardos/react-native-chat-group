@@ -25,7 +25,7 @@ export default Button
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 10,
+    marginTop: 15,
     flexDirection: 'row',
     justifyContent: 'center',
   },
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     backgroundColor: Colors.bgBlack,
     elevation: 10,
-    width: 170,
+    width: '100%',
     paddingVertical: Platform.OS === 'android' ? 14 : 16,
   },
   text: {

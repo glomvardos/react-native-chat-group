@@ -4,12 +4,11 @@ import {
   DrawerItem,
   DrawerItemList,
 } from '@react-navigation/drawer'
-import { StyleSheet, Pressable, Platform } from 'react-native'
+import { StyleSheet, Platform } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { Feather } from '@expo/vector-icons'
 import { MaterialIcons } from '@expo/vector-icons'
 
-import HomeScreen from '../screens/HomeScreen'
+import ChannelsScreen from '../screens/ChannelsScreen'
 
 import Colors from '../constants/colors'
 import navigationStyles from '../constants/navigationStyles'
@@ -27,7 +26,7 @@ const AuthenticatedStack = ({ logout }: Props) => {
   }
   return (
     <Drawer.Navigator
-      initialRouteName='Home'
+      initialRouteName='Channels'
       screenOptions={navigationStyles}
       drawerContent={props => {
         return (
@@ -43,33 +42,9 @@ const AuthenticatedStack = ({ logout }: Props) => {
         )
       }}
     >
-      <Drawer.Screen
-        name='Home'
-        component={HomeScreen}
-        options={{
-          title: 'Channels',
-          headerRight: () => (
-            <Pressable style={styles.button}>
-              <Feather name='plus' size={21} color='#fff' />
-            </Pressable>
-          ),
-        }}
-      />
+      <Drawer.Screen name='Channels' component={ChannelsScreen} />
     </Drawer.Navigator>
   )
 }
 
 export default AuthenticatedStack
-
-const styles = StyleSheet.create({
-  button: {
-    backgroundColor: Colors.darkGray,
-    borderRadius: 8,
-    width: Platform.OS === 'android' ? 27 : 29,
-    height: Platform.OS === 'android' ? 27 : 29,
-    marginRight: 15,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-})
