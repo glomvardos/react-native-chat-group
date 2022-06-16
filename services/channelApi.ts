@@ -3,7 +3,8 @@ import axiosInstance from './axiosInstance'
 
 type ServerError = { message: string }
 
-class Api {
+class ChannelApi {
+  // POST
   async createChannel(channelName: string) {
     try {
       return await axiosInstance.post('/channels/create-channel', {
@@ -20,6 +21,22 @@ class Api {
       }
     }
   }
+
+  // DELETE
+  async deleteChannel(id: number) {
+    try {
+      return await axiosInstance.delete(`/channels/delete-channel/${id}`)
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const serverError = error as AxiosError<ServerError>
+        if (serverError && serverError.response?.status === 404) {
+          throw new Error(serverError.response.data.message)
+        } else {
+          throw new Error('Something went wrong')
+        }
+      }
+    }
+  }
 }
 
-export default new Api()
+export default new ChannelApi()

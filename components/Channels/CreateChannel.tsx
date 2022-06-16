@@ -1,8 +1,10 @@
 import { useFormik } from 'formik'
 import { useState } from 'react'
 import { Alert, Modal, Pressable, StyleSheet, Text, View } from 'react-native'
+import { mutate } from 'swr'
 import Colors from '../../constants/colors'
-import api from '../../services/api'
+import channelApi from '../../services/channelApi'
+import validationSchema from '../../utils/validation-schema'
 import Button from '../UI/Button'
 import TextField from '../UI/TextField'
 
@@ -18,11 +20,16 @@ const CreateChannel = ({ showModal, setShowModal }: Props) => {
     initialValues: {
       name: '',
     },
+    validationSchema: validationSchema.createChannel,
     onSubmit: values => {
       setIsLoading(true)
-      api
+      channelApi
         .createChannel(values.name)
-        .then(res => setShowModal(false))
+        .then(_ => {
+          mutate('channels')
+          formik.resetForm()
+          setShowModal(false)
+        })
         .catch(error => Alert.alert('Error', error.message))
         .finally(() => setIsLoading(false))
     },
