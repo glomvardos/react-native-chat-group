@@ -4,12 +4,12 @@ import {
   DrawerItem,
   DrawerItemList,
 } from '@react-navigation/drawer'
+import { DrawerActions, useNavigation } from '@react-navigation/native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { MaterialIcons } from '@expo/vector-icons'
 import { Octicons } from '@expo/vector-icons'
-
-import ChannelsScreen from '../screens/ChannelsScreen'
 import navigationStyles from '../constants/navigationStyles'
+import TopTabsNavigation from '../components/Channels/TopTabsNavigation'
 
 const Drawer = createDrawerNavigator()
 
@@ -18,10 +18,14 @@ interface Props {
 }
 
 const AuthenticatedStack = ({ logout }: Props) => {
+  const navigate = useNavigation()
+
   const onLogout = async () => {
     await AsyncStorage.removeItem('token')
+    navigate.dispatch(DrawerActions.closeDrawer())
     logout()
   }
+
   return (
     <Drawer.Navigator
       initialRouteName='Channels'
@@ -42,7 +46,7 @@ const AuthenticatedStack = ({ logout }: Props) => {
     >
       <Drawer.Screen
         name='Channels'
-        component={ChannelsScreen}
+        component={TopTabsNavigation}
         options={{ drawerIcon: () => <Octicons name='broadcast' size={24} color='#fff' /> }}
       />
     </Drawer.Navigator>

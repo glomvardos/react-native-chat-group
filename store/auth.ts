@@ -3,11 +3,17 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 
 interface AuthState {
   token: string | null
+  user: UserTypes | null
 }
 
 export const token = atom<AuthState['token']>({
   key: 'token',
   default: AsyncStorage.getItem('token').then(token => token),
+})
+
+export const authUser = atom<AuthState['user']>({
+  key: 'authUser',
+  default: null,
 })
 
 export const saveToken = selector<AuthState['token']>({

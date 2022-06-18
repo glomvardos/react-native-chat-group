@@ -1,9 +1,11 @@
 import { useFormik } from 'formik'
 import { useState } from 'react'
 import { Alert, Modal, Pressable, StyleSheet, Text, View } from 'react-native'
+import { useRecoilValue } from 'recoil'
 import { mutate } from 'swr'
 import Colors from '../../constants/colors'
 import channelApi from '../../services/channelApi'
+import { token } from '../../store/auth'
 import validationSchema from '../../utils/validation-schema'
 import Button from '../UI/Button'
 import TextField from '../UI/TextField'
@@ -15,6 +17,7 @@ interface Props {
 
 const CreateChannel = ({ showModal, setShowModal }: Props) => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const accessToken = useRecoilValue(token)
 
   const formik = useFormik({
     initialValues: {
@@ -24,9 +27,10 @@ const CreateChannel = ({ showModal, setShowModal }: Props) => {
     onSubmit: values => {
       setIsLoading(true)
       channelApi
-        .createChannel(values.name)
+        .createChannel({ channelName: values.name, accessToken: accessToken! })
         .then(_ => {
-          mutate('channels')
+          mutate('allChannels')
+          mutate('myChannels')
           formik.resetForm()
           setShowModal(false)
         })

@@ -12,7 +12,11 @@ const useGetData = ({ url, key }: UseGetDataTypes) => {
   const accessToken = useRecoilValue(token)
 
   const fetcher = async () => {
-    const response = await axios.get(url)
+    const response = await axios.get(url, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
     return response.data
   }
 

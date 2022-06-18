@@ -1,15 +1,17 @@
+import { Suspense, useEffect } from 'react'
+import { Text, LogBox } from 'react-native'
+import { RecoilRoot } from 'recoil'
 import { StatusBar } from 'expo-status-bar'
 import Routes from './Routes/Routes'
 import * as SplashScreen from 'expo-splash-screen'
-import { Suspense, useEffect } from 'react'
 import SnackbarProvider from './context/snackbar'
 import CustomSnackbar from './components/UI/CustomSnackbar'
-import { RecoilRoot } from 'recoil'
-import { Text } from 'react-native'
 
 SplashScreen.preventAutoHideAsync()
   .then(result => console.log(`SplashScreen.preventAutoHideAsync() succeeded: ${result}`))
   .catch(console.warn)
+
+LogBox.ignoreLogs(['Setting a timer for a long period of time'])
 
 const App = () => {
   useEffect(() => {

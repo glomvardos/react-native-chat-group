@@ -1,0 +1,3 @@
+interface TokenType {
+  accessToken: string
+}
