@@ -2,6 +2,9 @@ import { StyleSheet, Text, View, useWindowDimensions, Pressable } from 'react-na
 import Swipeable from 'react-native-gesture-handler/Swipeable'
 import { AntDesign } from '@expo/vector-icons'
 import Colors from '../../constants/colors'
+import { useNavigation } from '@react-navigation/native'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import { RootStackParams } from '../../Routes/navigators/NativeStack'
 
 interface Props {
   channel: ChannelTypes
@@ -12,6 +15,7 @@ const Channel = ({ channel, onDeleteChannel }: Props) => {
   const splitName = channel.name.split(' ')
   const finalIconName = splitName[0][0].toUpperCase() + (splitName[1]?.[0]?.toUpperCase() ?? '')
   const { width } = useWindowDimensions()
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParams>>()
 
   const renderRightActions = () => (
     <Pressable onPress={() => onDeleteChannel && onDeleteChannel(channel.id)}>
@@ -22,24 +26,35 @@ const Channel = ({ channel, onDeleteChannel }: Props) => {
   )
 
   return (
-    <Swipeable enabled={onDeleteChannel ? true : false} renderRightActions={() => renderRightActions()}>
-      <View style={styles.container}>
-        <View style={styles.textIconContainer}>
-          <Text style={styles.textIcon}>{finalIconName}</Text>
+    <Pressable
+      onPress={() => navigation.navigate('Room', { channelId: channel.id })}
+      style={({ pressed }) => [styles.button, pressed && styles.iosButtonPressed]}
+      android_ripple={{ color: Colors.textIconBg }}
+    >
+      <Swipeable enabled={onDeleteChannel ? true : false} renderRightActions={() => renderRightActions()}>
+        <View style={styles.container}>
+          <View style={styles.textIconContainer}>
+            <Text style={styles.textIcon}>{finalIconName}</Text>
+          </View>
+          <Text style={[styles.text, { fontSize: width < 400 ? 17 : 22 }]}>{channel.name.toUpperCase()}</Text>
         </View>
-        <Text style={[styles.text, { fontSize: width < 400 ? 17 : 22 }]}>{channel.name.toUpperCase()}</Text>
-      </View>
-    </Swipeable>
+      </Swipeable>
+    </Pressable>
   )
 }
 
 export default Channel
 
 const styles = StyleSheet.create({
+  button: {
+    marginBottom: 20,
+  },
+  iosButtonPressed: {
+    opacity: 0.5,
+  },
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 25,
   },
   textIconContainer: {
     marginRight: 20,

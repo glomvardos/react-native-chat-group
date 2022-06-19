@@ -1,22 +1,7 @@
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
-
-import LoginScreen from '../screens/LoginScreen'
-import SignupScreen from '../screens/SignupScreen'
-
-export type RootStackParams = {
-  Login: undefined
-  Signup: undefined
-}
-
-const Stack = createNativeStackNavigator<RootStackParams>()
+import NativeStack from './navigators/NativeStack'
 
 const UnAuthenticatedStack = () => {
-  return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name='Login' component={LoginScreen} />
-      <Stack.Screen name='Signup' component={SignupScreen} />
-    </Stack.Navigator>
-  )
+  return <NativeStack isAuth={false} />
 }
 
 export default UnAuthenticatedStack

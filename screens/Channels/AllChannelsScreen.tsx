@@ -1,12 +1,22 @@
 import { SafeAreaView, StyleSheet, StatusBar, Platform, FlatList, View } from 'react-native'
+import { useEffect } from 'react'
+import { useSetRecoilState } from 'recoil'
 import Colors from '../../constants/colors'
 import useGetData from '../../hooks/useGetData'
 import RenderIf from '../../components/UI/RenderIf'
 import LoadingSpinner from '../../components/UI/LoadingSpinner'
 import Channel from '../../components/Channels/Channel'
+import { channels } from '../../store/channels'
 
 const AllChannelsScreen = () => {
+  const setChannels = useSetRecoilState<ChannelTypes[] | []>(channels)
   const { data, error, isLoading } = useGetData({ url: '/channels/channels', key: 'allChannels' })
+
+  useEffect(() => {
+    if (data) {
+      setChannels(data)
+    }
+  }, [data])
 
   return (
     <SafeAreaView style={styles.container}>

@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
-import { RootStackParams } from '../../Routes/UnAuthenticatedStack'
+import { RootStackParams } from '../../routes/UnAuthenticatedStack'
 
 interface Props {
   text: string

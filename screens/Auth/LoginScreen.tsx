@@ -5,14 +5,14 @@ import { useFormik } from 'formik'
 import { useSetRecoilState } from 'recoil'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
-import AuthFormContainer from '../components/UI/AuthFormContainer'
-import Button from '../components/UI/Button'
-import LoginSignupLink from '../components/UI/LoginSignupLink'
-import TextField from '../components/UI/TextField'
-import TextFieldLabel from '../components/UI/TextFieldLabel'
-import auth from '../services/auth'
-import validationSchema from '../utils/validation-schema'
-import { saveToken } from '../store/auth'
+import AuthFormContainer from '../../components/UI/AuthFormContainer'
+import Button from '../../components/UI/Button'
+import LoginSignupLink from '../../components/UI/LoginSignupLink'
+import TextField from '../../components/UI/TextField'
+import TextFieldLabel from '../../components/UI/TextFieldLabel'
+import auth from '../../services/auth'
+import validationSchema from '../../utils/validation-schema'
+import { saveToken } from '../../store/auth'
 
 const LoginScreen = () => {
   const setToken = useSetRecoilState(saveToken)
