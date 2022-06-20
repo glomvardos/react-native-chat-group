@@ -4,7 +4,7 @@ import axiosInstance from './axiosInstance'
 type ServerError = { message: string }
 class ChannelApi {
   // POST
-  async createChannel({ channelName, accessToken }: createChannelTypes) {
+  async createChannel({ channelName, accessToken }: CreateChannelTypes) {
     try {
       return await axiosInstance.post(
         '/channels/create-channel',
@@ -30,7 +30,7 @@ class ChannelApi {
   }
 
   // DELETE
-  async deleteChannel({ id, accessToken }: deleteChannelTypes) {
+  async deleteChannel({ id, accessToken }: DeleteChannelTypes) {
     try {
       return await axiosInstance.delete(`/channels/delete-channel/${id}`, {
         headers: {
@@ -44,6 +44,31 @@ class ChannelApi {
           throw new Error(serverError.response.data.message)
         } else {
           throw new Error('Something went wrong')
+        }
+      }
+    }
+  }
+
+  // PATCH
+  async joinChannel({ roomId, accessToken }: RoomIdChannelTypes) {
+    try {
+      return await axiosInstance.patch(
+        `/channels/join-channel/${roomId}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      )
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const serverError = error as AxiosError<ServerError>
+        if (serverError && serverError.response?.status === 403) {
+          throw new Error(serverError.response.data.message)
+        } else {
+          throw new Error(serverError.response!.data.message)
+          // throw new Error('Something went wrong')
         }
       }
     }

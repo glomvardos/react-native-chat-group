@@ -12,13 +12,13 @@ import TextField from '../../components/UI/TextField'
 import TextFieldLabel from '../../components/UI/TextFieldLabel'
 
 import { RootStackParams } from '../../Routes/navigators/NativeStack'
-import { useSnackbarContext } from '../../context/snackbar'
+// import { useSnackbarContext } from '../../context.old/snackbar'
 import { SnackbarStates } from '../../enums/snackbar'
 import validationSchema from '../../utils/validation-schema'
 import auth from '../../services/auth'
 
 const SignupScreen = () => {
-  const { dispatch } = useSnackbarContext()
+  // const { dispatch } = useSnackbarContext()
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParams>>()
 
@@ -40,10 +40,10 @@ const SignupScreen = () => {
           email: values.email.trim(),
         })
         .then(_ => {
-          dispatch({
-            type: SnackbarStates.SUCCESS,
-            payload: { message: 'You have been successfully signed up!' },
-          })
+          // dispatch({
+          //   type: SnackbarStates.SUCCESS,
+          //   payload: { message: 'You have been successfully signed up!' },
+          // })
           navigation.replace('Login')
         })
         .catch(error => Alert.alert('Error', error.message))

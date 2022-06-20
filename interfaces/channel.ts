@@ -4,13 +4,16 @@ interface ChannelTypes {
   createdAt: string
   updatedAt: string
   channelOwner: number
-  user: UserTypes[]
+  users: UserTypes[]
 }
 
-interface createChannelTypes extends TokenType {
+interface CreateChannelTypes extends TokenType {
   channelName: string
 }
 
-interface deleteChannelTypes extends TokenType {
+interface DeleteChannelTypes extends TokenType {
   id: number
+}
+interface RoomIdChannelTypes extends TokenType {
+  roomId: number
 }

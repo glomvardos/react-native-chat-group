@@ -1,27 +1,22 @@
-import { useEffect, useLayoutEffect, useState } from 'react'
+import { useLayoutEffect, useState } from 'react'
 import { Platform, Pressable, StyleSheet } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
-import { useSetRecoilState } from 'recoil'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 import { Feather } from '@expo/vector-icons'
 
 import AllChannelsScreen from '../../screens/Channels/AllChannelsScreen'
 import Colors from '../../constants/colors'
-import { authUser } from '../../store/auth'
-import useGetData from '../../hooks/useGetData'
 import MyChannelsScreen from '../../screens/Channels/MyChannelsScreen'
 import CreateChannel from './CreateChannel'
 
 const Tab = createMaterialTopTabNavigator()
 
 const TopTabsNavigation = () => {
-  const setUser = useSetRecoilState<UserTypes | null>(authUser)
   const [showModal, setShowModal] = useState<boolean>(false)
-  const navigate = useNavigation()
-  const { data: user } = useGetData({ url: '/authenticated/user', key: 'user' })
+  const navigation = useNavigation()
 
   useLayoutEffect(() => {
-    navigate.setOptions({
+    navigation.setOptions({
       title: 'Channels',
       headerRight: () => (
         <Pressable style={styles.button} onPress={() => setShowModal(prevState => !prevState)}>
@@ -29,12 +24,6 @@ const TopTabsNavigation = () => {
         </Pressable>
       ),
     })
-  }, [])
-
-  useEffect(() => {
-    if (user) {
-      setUser(user)
-    }
   }, [])
 
   return (
