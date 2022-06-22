@@ -1,5 +1,5 @@
 import { useLayoutEffect, useState } from 'react'
-import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { Keyboard, Pressable, StyleSheet, Text, View } from 'react-native'
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import { useRecoilValue } from 'recoil'
 import { mutate } from 'swr'
@@ -9,6 +9,8 @@ import { RootStackParams } from '../../Routes/navigators/NativeStack'
 import channelApi from '../../services/channelApi'
 import { authUser, token } from '../../store/auth'
 import { channels } from '../../store/channels'
+import Messages from './components/Messages/Messages'
+import LeaveMessageInput from './components/LeaveMessageInput/LeaveMessageInput'
 
 type RoomScreenRouteProp = RouteProp<RootStackParams, 'Room'>
 
@@ -28,7 +30,7 @@ const RoomScreen = () => {
     setIsLoading(true)
     channelApi
       .joinChannel({ roomId: selectedChannel!.id, accessToken: accessToken! })
-      .then(res => {
+      .then(_ => {
         mutate('allChannels')
         mutate('myChannels')
       })
@@ -54,8 +56,12 @@ const RoomScreen = () => {
       <RenderIf isTrue={isLoading}>
         <LoadingSpinner />
       </RenderIf>
-      <Text>{selectedChannel?.name}</Text>
-      <Text>Test</Text>
+      <RenderIf isTrue={!isLoading}>
+        <Pressable style={styles.container} onPress={Keyboard.dismiss}>
+          <Messages />
+          <LeaveMessageInput />
+        </Pressable>
+      </RenderIf>
     </View>
   )
 }
