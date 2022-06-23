@@ -1,9 +1,9 @@
 import { KeyboardAvoidingView, StyleSheet, View, Platform } from 'react-native'
+import { useHeaderHeight } from '@react-navigation/elements'
 
-import React from 'react'
 import Colors from '../../../../constants/colors'
 import TextField from '../../../../components/UI/TextField'
-import { useHeaderHeight } from '@react-navigation/elements'
+import SendMessageBtn from '../Buttons/SendMessageBtn'
 
 const LeaveMessageInput = () => {
   const headerHeight = useHeaderHeight()
@@ -14,7 +14,11 @@ const LeaveMessageInput = () => {
       style={styles.container}
       behavior={Platform.select({ android: 'height', ios: 'padding' })}
     >
-      <TextField hasError={false} multiline />
+      <View style={styles.messageWrapper}>
+        <TextField placeholder='Leave message' multiline paddingVertical={20} width='90%' />
+        <SendMessageBtn />
+      </View>
+
       <View style={{ marginBottom: 10 }} />
     </KeyboardAvoidingView>
   )
@@ -25,7 +29,12 @@ export default LeaveMessageInput
 const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.textIconBg,
-    paddingHorizontal: 20,
+
     paddingTop: 20,
+  },
+  messageWrapper: {
+    flexDirection: 'row',
+    paddingHorizontal: Platform.select({ android: 15, ios: 20 }),
+    alignItems: 'center',
   },
 })
