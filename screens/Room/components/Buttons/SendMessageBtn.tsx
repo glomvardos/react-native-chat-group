@@ -2,9 +2,13 @@ import { Pressable, StyleSheet } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
 import Colors from '../../../../constants/colors'
 
-const SendMessageBtn = () => {
+interface Props {
+  onPressHandler: () => void
+}
+
+const SendMessageBtn = ({ onPressHandler }: Props) => {
   return (
-    <Pressable style={styles.container} onPress={() => {}}>
+    <Pressable style={styles.container} onPress={onPressHandler}>
       <MaterialIcons name='send' size={30} color={Colors.blue} />
     </Pressable>
   )

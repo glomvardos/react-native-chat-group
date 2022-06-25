@@ -26,6 +26,7 @@ const AllChannelsScreen = () => {
         </RenderIf>
         <RenderIf isTrue={!isLoading && data}>
           <FlatList
+            bounces={false}
             data={data}
             keyExtractor={item => item.id}
             renderItem={({ item }) => <Channel channel={item} />}

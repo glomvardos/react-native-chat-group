@@ -1,5 +1,5 @@
 import { useLayoutEffect, useState } from 'react'
-import { Keyboard, Pressable, StyleSheet, Text, View } from 'react-native'
+import { Alert, StyleSheet, View } from 'react-native'
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import { useRecoilValue } from 'recoil'
 import { mutate } from 'swr'
@@ -11,6 +11,8 @@ import { authUser, token } from '../../store/auth'
 import { channels } from '../../store/channels'
 import Messages from './components/Messages/Messages'
 import LeaveMessageInput from './components/LeaveMessageInput/LeaveMessageInput'
+import useGetData from '../../hooks/useGetData'
+import JoinRoomMessage from './components/UI/JoinRoomMessage'
 
 type RoomScreenRouteProp = RouteProp<RootStackParams, 'Room'>
 
@@ -26,6 +28,12 @@ const RoomScreen = () => {
   const selectedChannel = allChannels.find(channel => channel.id === params.channelId)
   const isAlreadyJoined = selectedChannel?.users.some(user => user.id === loggedInUser?.id)
 
+  const {
+    data: messages,
+    error,
+    isLoading: isMessageLoading,
+  } = useGetData({ key: 'channelMessages', url: `/messages/channel-messages/${selectedChannel?.id}` })
+
   const onPressJoin = () => {
     setIsLoading(true)
     channelApi
@@ -34,33 +42,40 @@ const RoomScreen = () => {
         mutate('allChannels')
         mutate('myChannels')
       })
-      .catch(err => console.log(err))
+      .catch(error => Alert.alert('Error', error.message))
       .finally(() => setIsLoading(false))
   }
 
   useLayoutEffect(() => {
-    navigation.setOptions({
-      headerTitle: () => <Text style={styles.headerTitle}>{selectedChannel?.name}</Text>,
-      headerRight: () => (
-        <RenderIf isTrue={!isAlreadyJoined}>
-          <Pressable style={({ pressed }) => pressed && styles.iosPressed} onPress={onPressJoin}>
-            <Text style={styles.headerRightText}>Join</Text>
-          </Pressable>
-        </RenderIf>
-      ),
-    })
-  }, [isAlreadyJoined])
+    mutate('channelMessages')
+  }, [])
+
+  // useLayoutEffect(() => {
+  //   navigation.setOptions({
+  //     headerTitle: () => <Text style={styles.headerTitle}>{selectedChannel?.name}</Text>,
+  //     headerRight: () => (
+  //       <RenderIf isTrue={!isAlreadyJoined}>
+  //         <Pressable style={({ pressed }) => pressed && styles.iosPressed} onPress={onPressJoin}>
+  //           <Text style={styles.headerRightText}>Join</Text>
+  //         </Pressable>
+  //       </RenderIf>
+  //     ),
+  //   })
+  // }, [isAlreadyJoined])
 
   return (
     <View style={styles.container}>
-      <RenderIf isTrue={isLoading}>
+      <RenderIf isTrue={isLoading && isMessageLoading}>
         <LoadingSpinner />
       </RenderIf>
-      <RenderIf isTrue={!isLoading}>
-        <Pressable style={styles.container} onPress={Keyboard.dismiss}>
-          <Messages />
-          <LeaveMessageInput />
-        </Pressable>
+      <RenderIf
+        isTrue={!isLoading && !isMessageLoading && !!isAlreadyJoined && selectedChannel !== undefined}
+      >
+        <Messages messages={messages} />
+        <LeaveMessageInput channelId={selectedChannel!.id} />
+      </RenderIf>
+      <RenderIf isTrue={!isLoading && !isMessageLoading && !!!isAlreadyJoined}>
+        <JoinRoomMessage onPressHandler={onPressJoin} />
       </RenderIf>
     </View>
   )

@@ -1,12 +1,40 @@
-import { KeyboardAvoidingView, StyleSheet, View, Platform } from 'react-native'
+import { KeyboardAvoidingView, StyleSheet, View, Platform, Keyboard, Alert } from 'react-native'
 import { useHeaderHeight } from '@react-navigation/elements'
+import { useFormik } from 'formik'
 
 import Colors from '../../../../constants/colors'
 import TextField from '../../../../components/UI/TextField'
 import SendMessageBtn from '../Buttons/SendMessageBtn'
+import validationSchema from '../../../../utils/validation-schema'
+import messageApi from '../../../../services/messageApi'
+import { useRecoilValue } from 'recoil'
+import { token } from '../../../../store/auth'
+import { mutate } from 'swr'
 
-const LeaveMessageInput = () => {
+interface Props {
+  channelId: number
+}
+
+const LeaveMessageInput = ({ channelId }: Props) => {
+  const accessToken = useRecoilValue(token)
   const headerHeight = useHeaderHeight()
+
+  const formik = useFormik({
+    initialValues: {
+      message: '',
+    },
+    validationSchema: validationSchema.sendMessage,
+    onSubmit: values => {
+      messageApi
+        .createMessage({ accessToken: accessToken!, message: values.message, channelId })
+        .then(_ => {
+          formik.resetForm()
+          Keyboard.dismiss()
+          mutate('channelMessages')
+        })
+        .catch(error => Alert.alert('Error', error.message))
+    },
+  })
 
   return (
     <KeyboardAvoidingView
@@ -15,8 +43,16 @@ const LeaveMessageInput = () => {
       behavior={Platform.select({ android: 'height', ios: 'padding' })}
     >
       <View style={styles.messageWrapper}>
-        <TextField placeholder='Leave message' multiline paddingVertical={20} width='90%' />
-        <SendMessageBtn />
+        <TextField
+          placeholder='Leave message'
+          multiline
+          paddingVertical={20}
+          width='90%'
+          onChangeText={formik.handleChange('message')}
+          onBlur={formik.handleBlur('message')}
+          value={formik.values.message}
+        />
+        <SendMessageBtn onPressHandler={formik.handleSubmit} />
       </View>
 
       <View style={{ marginBottom: 10 }} />

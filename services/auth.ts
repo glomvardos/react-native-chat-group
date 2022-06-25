@@ -1,7 +1,5 @@
-import axiosInstance from './axiosInstance'
 import axios, { AxiosError } from 'axios'
-
-type ServerError = { message: string }
+import axiosInstance, { ServerError } from './axiosInstance'
 
 class Auth {
   async signup({ email, password, firstName, lastName }: UserTypes) {

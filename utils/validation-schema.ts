@@ -22,6 +22,11 @@ class ValidationSchema {
       name: yup.string().required().max(20),
     })
   }
-}
 
+  sendMessage() {
+    return yup.object({
+      message: yup.string().trim().required(),
+    })
+  }
+}
 export default new ValidationSchema()

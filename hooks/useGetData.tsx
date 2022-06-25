@@ -21,7 +21,7 @@ const useGetData = ({ url, key }: UseGetDataTypes) => {
   }
 
   const { data, error } = useSWR(key, accessToken ? fetcher : null, {
-    // refreshInterval: 1000,
+    refreshInterval: url.startsWith('/messages') ? 1000 : undefined,
   })
   const isLoading = !data && !error
 

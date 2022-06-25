@@ -1,7 +1,6 @@
 import axios, { AxiosError } from 'axios'
-import axiosInstance from './axiosInstance'
+import axiosInstance, { ServerError } from './axiosInstance'
 
-type ServerError = { message: string }
 class ChannelApi {
   // POST
   async createChannel({ channelName, accessToken }: CreateChannelTypes) {
