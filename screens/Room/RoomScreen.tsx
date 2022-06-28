@@ -1,5 +1,5 @@
 import { useLayoutEffect, useState } from 'react'
-import { Alert, StyleSheet, View } from 'react-native'
+import { Alert, StyleSheet, Text, View } from 'react-native'
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import { useRecoilValue } from 'recoil'
 import { mutate } from 'swr'
@@ -50,18 +50,18 @@ const RoomScreen = () => {
     mutate('channelMessages')
   }, [])
 
-  // useLayoutEffect(() => {
-  //   navigation.setOptions({
-  //     headerTitle: () => <Text style={styles.headerTitle}>{selectedChannel?.name}</Text>,
-  //     headerRight: () => (
-  //       <RenderIf isTrue={!isAlreadyJoined}>
-  //         <Pressable style={({ pressed }) => pressed && styles.iosPressed} onPress={onPressJoin}>
-  //           <Text style={styles.headerRightText}>Join</Text>
-  //         </Pressable>
-  //       </RenderIf>
-  //     ),
-  //   })
-  // }, [isAlreadyJoined])
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: () => <Text style={styles.headerTitle}>{selectedChannel?.name}</Text>,
+      // headerRight: () => (
+      //   <RenderIf isTrue={!isAlreadyJoined}>
+      //     <Pressable style={({ pressed }) => pressed && styles.iosPressed} onPress={onPressJoin}>
+      //       <Text style={styles.headerRightText}>Join</Text>
+      //     </Pressable>
+      //   </RenderIf>
+      // ),
+    })
+  }, [isAlreadyJoined])
 
   return (
     <View style={styles.container}>
