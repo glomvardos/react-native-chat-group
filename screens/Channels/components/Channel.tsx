@@ -1,10 +1,11 @@
 import { StyleSheet, Text, View, useWindowDimensions, Pressable } from 'react-native'
 import Swipeable from 'react-native-gesture-handler/Swipeable'
 import { AntDesign } from '@expo/vector-icons'
-import Colors from '../../constants/colors'
+import Colors from '../../../constants/colors'
 import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { RootStackParams } from '../../Routes/navigators/NativeStack'
+import { RootStackParams } from '../../../Routes/navigators/NativeStack'
+import stringMethods from '../../../utils/string-methods'
 
 interface Props {
   channel: ChannelTypes
@@ -12,8 +13,7 @@ interface Props {
 }
 
 const Channel = ({ channel, onDeleteChannel }: Props) => {
-  const splitName = channel.name.split(' ')
-  const finalIconName = splitName[0][0].toUpperCase() + (splitName[1]?.[0]?.toUpperCase() ?? '')
+  const iconName = stringMethods.getInitialLetters(channel.name)
   const { width } = useWindowDimensions()
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParams>>()
 
@@ -34,7 +34,7 @@ const Channel = ({ channel, onDeleteChannel }: Props) => {
       <Swipeable enabled={onDeleteChannel ? true : false} renderRightActions={() => renderRightActions()}>
         <View style={styles.container}>
           <View style={styles.textIconContainer}>
-            <Text style={styles.textIcon}>{finalIconName}</Text>
+            <Text style={styles.textIcon}>{iconName}</Text>
           </View>
           <Text style={[styles.text, { fontSize: width < 400 ? 17 : 22 }]}>{channel.name.toUpperCase()}</Text>
         </View>

@@ -66,8 +66,30 @@ class ChannelApi {
         if (serverError && serverError.response?.status === 403) {
           throw new Error(serverError.response.data.message)
         } else {
-          throw new Error(serverError.response!.data.message)
-          // throw new Error('Something went wrong')
+          throw new Error('Something went wrong')
+        }
+      }
+    }
+  }
+
+  async leaveChannel({ roomId, accessToken }: RoomIdChannelTypes) {
+    try {
+      return await axiosInstance.patch(
+        `/channels/leave-channel/${roomId}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      )
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const serverError = error as AxiosError<ServerError>
+        if (serverError && serverError.response?.status === 403) {
+          throw new Error(serverError.response.data.message)
+        } else {
+          throw new Error('Something went wrong')
         }
       }
     }

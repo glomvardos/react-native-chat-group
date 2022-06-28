@@ -1,5 +1,5 @@
 import { useLayoutEffect, useState } from 'react'
-import { Alert, StyleSheet, Text, View } from 'react-native'
+import { Alert, Pressable, StyleSheet, Text, View } from 'react-native'
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import { useRecoilValue } from 'recoil'
 import { mutate } from 'swr'
@@ -13,12 +13,13 @@ import Messages from './components/Messages/Messages'
 import LeaveMessageInput from './components/LeaveMessageInput/LeaveMessageInput'
 import useGetData from '../../hooks/useGetData'
 import JoinRoomMessage from './components/UI/JoinRoomMessage'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 
 type RoomScreenRouteProp = RouteProp<RootStackParams, 'Room'>
 
 const RoomScreen = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const navigation = useNavigation()
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParams>>()
   const loggedInUser = useRecoilValue(authUser)
   const accessToken = useRecoilValue(token)
 
@@ -27,6 +28,7 @@ const RoomScreen = () => {
 
   const selectedChannel = allChannels.find(channel => channel.id === params.channelId)
   const isAlreadyJoined = selectedChannel?.users.some(user => user.id === loggedInUser?.id)
+  const isNotTheChannelOwner = selectedChannel?.channelOwner !== loggedInUser?.id
 
   const {
     data: messages,
@@ -50,16 +52,33 @@ const RoomScreen = () => {
     mutate('channelMessages')
   }, [])
 
+  const onPressLeave = () => {
+    setIsLoading(true)
+    channelApi
+      .leaveChannel({ roomId: selectedChannel!.id, accessToken: accessToken! })
+      .then(_ => {
+        mutate('allChannels')
+        mutate('myChannels')
+        navigation.navigate('AllChannels')
+      })
+      .catch(error => Alert.alert('Error', error.message))
+      .finally(() => setIsLoading(false))
+  }
+
+  useLayoutEffect(() => {
+    mutate('channelMessages')
+  }, [])
+
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: () => <Text style={styles.headerTitle}>{selectedChannel?.name}</Text>,
-      // headerRight: () => (
-      //   <RenderIf isTrue={!isAlreadyJoined}>
-      //     <Pressable style={({ pressed }) => pressed && styles.iosPressed} onPress={onPressJoin}>
-      //       <Text style={styles.headerRightText}>Join</Text>
-      //     </Pressable>
-      //   </RenderIf>
-      // ),
+      headerRight: () => (
+        <RenderIf isTrue={!!isAlreadyJoined && isNotTheChannelOwner}>
+          <Pressable style={({ pressed }) => pressed && styles.iosPressed} onPress={onPressLeave}>
+            <Text style={styles.headerRightText}>Leave</Text>
+          </Pressable>
+        </RenderIf>
+      ),
     })
   }, [isAlreadyJoined])
 

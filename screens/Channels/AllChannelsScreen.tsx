@@ -5,7 +5,7 @@ import Colors from '../../constants/colors'
 import useGetData from '../../hooks/useGetData'
 import RenderIf from '../../components/UI/RenderIf'
 import LoadingSpinner from '../../components/UI/LoadingSpinner'
-import Channel from '../../components/Channels/Channel'
+import Channel from './components/Channel'
 import { channels } from '../../store/channels'
 
 const AllChannelsScreen = () => {

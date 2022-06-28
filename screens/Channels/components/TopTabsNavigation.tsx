@@ -4,9 +4,9 @@ import { useNavigation } from '@react-navigation/native'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 import { Feather } from '@expo/vector-icons'
 
-import AllChannelsScreen from '../../screens/Channels/AllChannelsScreen'
-import Colors from '../../constants/colors'
-import MyChannelsScreen from '../../screens/Channels/MyChannelsScreen'
+import AllChannelsScreen from '../AllChannelsScreen'
+import Colors from '../../../constants/colors'
+import MyChannelsScreen from '../MyChannelsScreen'
 import CreateChannel from './CreateChannel'
 
 const Tab = createMaterialTopTabNavigator()

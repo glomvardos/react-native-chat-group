@@ -23,7 +23,7 @@ const Messages = ({ messages = [] }: Props) => {
         inverted={true}
         data={reversedMessages}
         keyExtractor={item => item.id.toString()}
-        renderItem={({ item }) => <Message message={item} />}
+        renderItem={({ item, index }) => <Message message={item} marginBottom={index === 0 ? 0 : 20} />}
       />
     </View>
   )

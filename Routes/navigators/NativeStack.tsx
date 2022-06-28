@@ -13,6 +13,7 @@ export type RootStackParams = {
   Login: undefined
   Signup: undefined
   Home: undefined
+  AllChannels: undefined
   Room: { channelId: number }
 }
 

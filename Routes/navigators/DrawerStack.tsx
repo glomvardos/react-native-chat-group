@@ -8,7 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { MaterialIcons } from '@expo/vector-icons'
 import { Octicons } from '@expo/vector-icons'
 import navigationStyles from '../../constants/navigationStyles'
-import TopTabsNavigation from '../../components/Channels/TopTabsNavigation'
+import TopTabsNavigation from '../../screens/Channels/components/TopTabsNavigation'
 
 const Drawer = createDrawerNavigator()
 

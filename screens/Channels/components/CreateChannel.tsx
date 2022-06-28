@@ -3,12 +3,12 @@ import { useState } from 'react'
 import { Alert, Modal, Pressable, StyleSheet, Text, View } from 'react-native'
 import { useRecoilValue } from 'recoil'
 import { mutate } from 'swr'
-import Colors from '../../constants/colors'
-import channelApi from '../../services/channelApi'
-import { token } from '../../store/auth'
-import validationSchema from '../../utils/validation-schema'
-import Button from '../UI/Button'
-import TextField from '../UI/TextField'
+import Colors from '../../../constants/colors'
+import channelApi from '../../../services/channelApi'
+import { token } from '../../../store/auth'
+import validationSchema from '../../../utils/validation-schema'
+import Button from '../../../components/UI/Button'
+import TextField from '../../../components/UI/TextField'
 
 interface Props {
   showModal: boolean
