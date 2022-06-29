@@ -27,7 +27,7 @@ const Stack = createNativeStackNavigator<RootStackParams>()
 const NativeStack = ({ isAuth, logout }: Props) => {
   const setUser = useSetRecoilState<UserTypes | null>(authUser)
 
-  const { data: user } = useGetData({ url: '/authenticated/user', key: 'user' })
+  const { data: user } = useGetData({ url: '/users/user', key: 'user' })
 
   useEffect(() => {
     if (user) {
