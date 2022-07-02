@@ -1,15 +1,15 @@
 import { KeyboardAvoidingView, StyleSheet, View, Platform, Keyboard, Alert } from 'react-native'
 import { useHeaderHeight } from '@react-navigation/elements'
 import { useFormik } from 'formik'
+import { mutate } from 'swr'
+import { useRecoilValue } from 'recoil'
 
 import Colors from '../../../../constants/colors'
 import TextField from '../../../../components/UI/TextField'
 import SendMessageBtn from '../Buttons/SendMessageBtn'
 import validationSchema from '../../../../utils/validation-schema'
 import messageApi from '../../../../services/messageApi'
-import { useRecoilValue } from 'recoil'
 import { token } from '../../../../store/auth'
-import { mutate } from 'swr'
 
 interface Props {
   channelId: number

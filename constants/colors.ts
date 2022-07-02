@@ -5,6 +5,7 @@ const Colors = {
   blue: '#2F80ED',
   success: '#388e3c',
   error: '#d32f2f',
+  edit: '#5346ff',
 }
 
 export default Colors

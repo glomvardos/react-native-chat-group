@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { FlatList, StyleSheet, View } from 'react-native'
 import Message from './Message'
 
@@ -7,6 +7,8 @@ interface Props {
 }
 
 const Messages = ({ messages = [] }: Props) => {
+  const [scrollIndex, setScrollIndex] = useState<number>(0)
+  const flatListRef = useRef<FlatList>(null)
   // Revese the messages array without using .reverse()
   const reversedMessages = useMemo(() => {
     const reversedMessages = []
@@ -16,14 +18,31 @@ const Messages = ({ messages = [] }: Props) => {
     return reversedMessages
   }, [messages])
 
+  useEffect(() => {
+    if (scrollIndex !== 0) {
+      flatListRef.current?.scrollToIndex({ index: scrollIndex, animated: false })
+    }
+  }, [scrollIndex])
+
   return (
     <View style={styles.container}>
       <FlatList
+        ref={flatListRef}
         bounces={false}
         inverted={true}
         data={reversedMessages}
+        onScrollToIndexFailed={() => {
+          setScrollIndex(0)
+        }}
         keyExtractor={item => item.id.toString()}
-        renderItem={({ item, index }) => <Message message={item} marginBottom={index === 0 ? 0 : 20} />}
+        renderItem={({ item, index }) => (
+          <Message
+            setScrollIndex={setScrollIndex}
+            index={index}
+            message={item}
+            marginBottom={index === 0 ? 0 : 20}
+          />
+        )}
       />
     </View>
   )

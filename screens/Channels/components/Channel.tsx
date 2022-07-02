@@ -1,11 +1,11 @@
 import { StyleSheet, Text, View, useWindowDimensions, Pressable } from 'react-native'
 import Swipeable from 'react-native-gesture-handler/Swipeable'
-import { AntDesign } from '@expo/vector-icons'
 import Colors from '../../../constants/colors'
 import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParams } from '../../../Routes/navigators/NativeStack'
 import stringMethods from '../../../utils/string-methods'
+import SwipeAction from '../../../components/UI/SwipeAction'
 
 interface Props {
   channel: ChannelTypes
@@ -17,21 +17,18 @@ const Channel = ({ channel, onDeleteChannel }: Props) => {
   const { width } = useWindowDimensions()
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParams>>()
 
-  const renderRightActions = () => (
-    <Pressable onPress={() => onDeleteChannel && onDeleteChannel(channel.id)}>
-      <View style={styles.swipeContainer}>
-        <AntDesign name='delete' size={24} color='#fff' />
-      </View>
-    </Pressable>
-  )
-
   return (
     <Pressable
       onPress={() => navigation.navigate('Room', { channelId: channel.id })}
       style={({ pressed }) => [styles.button, pressed && styles.iosButtonPressed]}
       android_ripple={{ color: Colors.textIconBg }}
     >
-      <Swipeable enabled={onDeleteChannel ? true : false} renderRightActions={() => renderRightActions()}>
+      <Swipeable
+        enabled={onDeleteChannel ? true : false}
+        renderRightActions={() => (
+          <SwipeAction onDeletePressHandler={() => onDeleteChannel && onDeleteChannel(channel.id)} />
+        )}
+      >
         <View style={styles.container}>
           <View style={styles.textIconContainer}>
             <Text style={styles.textIcon}>{iconName}</Text>
