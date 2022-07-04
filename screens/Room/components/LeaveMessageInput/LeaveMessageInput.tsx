@@ -1,7 +1,7 @@
 import { KeyboardAvoidingView, StyleSheet, View, Platform, Keyboard, Alert } from 'react-native'
 import { useHeaderHeight } from '@react-navigation/elements'
 import { useFormik } from 'formik'
-import { mutate } from 'swr'
+import { useSWRConfig } from 'swr'
 import { useRecoilValue } from 'recoil'
 
 import Colors from '../../../../constants/colors'
@@ -18,7 +18,7 @@ interface Props {
 const LeaveMessageInput = ({ channelId }: Props) => {
   const accessToken = useRecoilValue(token)
   const headerHeight = useHeaderHeight()
-
+  const { mutate } = useSWRConfig()
   const formik = useFormik({
     initialValues: {
       message: '',

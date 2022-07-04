@@ -17,7 +17,6 @@ const AllChannelsScreen = () => {
       setChannels(data)
     }
   }, [data])
-
   return (
     <ContentContainer paddingRight={0}>
       <RenderIf isTrue={isLoading}>

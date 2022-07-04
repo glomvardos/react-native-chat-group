@@ -5,6 +5,13 @@ interface ChannelTypes {
   updatedAt: string
   channelOwner: number
   users: UserTypes[]
+  messages?: MessageTypes[]
+}
+
+interface ChannelSwrTypes {
+  data: ChannelTypes
+  error: Error
+  isLoading: boolean
 }
 
 interface CreateChannelTypes extends TokenType {
@@ -16,4 +23,8 @@ interface DeleteChannelTypes extends TokenType {
 }
 interface RoomIdChannelTypes extends TokenType {
   roomId: number
+}
+interface LeaveChannelTypes extends TokenType {
+  roomId: number
+  userId: number
 }

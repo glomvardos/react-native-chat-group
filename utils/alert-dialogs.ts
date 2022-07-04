@@ -23,6 +23,18 @@ class AlertDialogs {
       { cancelable: true }
     )
   }
+
+  confirmRemoveUser(onRemoveUser: () => void, user: string, roomName: string) {
+    return Alert.alert(
+      'Remove User',
+      `Are you sure you want to remove ${user} from ${roomName}?`,
+      [
+        { text: 'Cancel', style: 'cancel' },
+        { text: 'Remove', style: 'destructive', onPress: onRemoveUser },
+      ],
+      { cancelable: true }
+    )
+  }
 }
 
 export default new AlertDialogs()

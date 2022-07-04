@@ -72,11 +72,13 @@ class ChannelApi {
     }
   }
 
-  async leaveChannel({ roomId, accessToken }: RoomIdChannelTypes) {
+  async leaveChannel({ roomId, userId, accessToken }: LeaveChannelTypes) {
     try {
       return await axiosInstance.patch(
         `/channels/leave-channel/${roomId}`,
-        {},
+        {
+          id: userId,
+        },
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,

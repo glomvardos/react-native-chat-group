@@ -1,8 +1,8 @@
 import { useFormik } from 'formik'
 import { useState } from 'react'
-import { Alert, Modal, Pressable, StyleSheet, Text, View } from 'react-native'
+import { useSWRConfig } from 'swr'
+import { Alert, Modal, Pressable, StyleSheet, Text } from 'react-native'
 import { useRecoilValue } from 'recoil'
-import { mutate } from 'swr'
 import Colors from '../../../constants/colors'
 import channelApi from '../../../services/channelApi'
 import { token } from '../../../store/auth'
@@ -18,6 +18,7 @@ interface Props {
 const CreateChannel = ({ showModal, setShowModal }: Props) => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const accessToken = useRecoilValue(token)
+  const { mutate } = useSWRConfig()
 
   const formik = useFormik({
     initialValues: {

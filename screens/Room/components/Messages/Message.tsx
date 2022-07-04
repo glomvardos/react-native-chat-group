@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react'
-import { mutate } from 'swr'
 import { Alert, StyleSheet, Text, View } from 'react-native'
 import { Swipeable, GestureHandlerRootView, TextInput } from 'react-native-gesture-handler'
 import { useRecoilValue } from 'recoil'
@@ -7,10 +6,11 @@ import moment from 'moment'
 import RenderIf from '../../../../components/UI/RenderIf'
 import Colors from '../../../../constants/colors'
 import { authUser, token } from '../../../../store/auth'
-import stringMethods from '../../../../utils/string-methods'
 import SwipeAction from '../../../../components/UI/SwipeAction'
 import messageApi from '../../../../services/messageApi'
 import alertDialogs from '../../../../utils/alert-dialogs'
+import UserIcon from '../UI/UserIcon'
+import { useSWRConfig } from 'swr'
 
 interface Props {
   message: MessageTypes
@@ -27,8 +27,7 @@ const Message = ({ message, marginBottom, index, setScrollIndex }: Props) => {
   const accessToken = useRecoilValue(token)
   const user = useRecoilValue(authUser)
   const isMessageFromMe = message.userId === user?.id
-  const userInitials = stringMethods.getInitialLetters(`${message.user.firstName} ${message.user.lastName}`)
-
+  const { mutate } = useSWRConfig()
   let inputTimer: NodeJS.Timeout
   let indexTimer: NodeJS.Timeout
 
@@ -99,21 +98,16 @@ const Message = ({ message, marginBottom, index, setScrollIndex }: Props) => {
             isMessageFromMe ? { flexDirection: 'row-reverse' } : { flexDirection: 'row' },
           ]}
         >
-          <View
-            style={[
-              styles.userIconContainer,
-              isMessageFromMe
-                ? { transform: [{ translateY: marginBottom === 0 ? 0 : -9 }] }
-                : { transform: [{ translateY: marginBottom === 0 ? 9 : 0 }] },
-            ]}
-          >
-            <Text style={styles.userIconText}>{userInitials}</Text>
-          </View>
+          <UserIcon
+            text={`${message.user.firstName} ${message.user.lastName}`}
+            isMessageFromMe={isMessageFromMe}
+            marginBottom={marginBottom}
+          />
+
           <View style={styles.messageContainer}>
             <RenderIf isTrue={!isMessageFromMe}>
               <Text style={styles.messageFromText}>{message.user.firstName}</Text>
             </RenderIf>
-
             <View
               style={[
                 styles.textContainer,
@@ -149,18 +143,6 @@ export default Message
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-  },
-  userIconContainer: {
-    backgroundColor: Colors.textIconBg,
-    borderRadius: 9999,
-    width: 35,
-    height: 35,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  userIconText: {
-    color: '#fff',
-    textTransform: 'uppercase',
   },
   messageContainer: {
     position: 'relative',

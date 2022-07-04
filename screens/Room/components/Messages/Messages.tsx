@@ -3,7 +3,7 @@ import { FlatList, StyleSheet, View } from 'react-native'
 import Message from './Message'
 
 interface Props {
-  messages: MessageTypes[]
+  messages: ChannelTypes['messages']
 }
 
 const Messages = ({ messages = [] }: Props) => {
@@ -15,6 +15,11 @@ const Messages = ({ messages = [] }: Props) => {
     for (let i = messages.length - 1; i >= 0; i--) {
       reversedMessages.push(messages[i])
     }
+
+    reversedMessages.sort((a: { createdAt: string }, b: { createdAt: string }) =>
+      b.createdAt.localeCompare(a.createdAt)
+    )
+
     return reversedMessages
   }, [messages])
 
@@ -34,7 +39,7 @@ const Messages = ({ messages = [] }: Props) => {
         onScrollToIndexFailed={() => {
           setScrollIndex(0)
         }}
-        keyExtractor={item => item.id.toString()}
+        keyExtractor={item => item.id}
         renderItem={({ item, index }) => (
           <Message
             setScrollIndex={setScrollIndex}

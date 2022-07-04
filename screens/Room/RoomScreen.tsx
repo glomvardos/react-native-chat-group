@@ -1,8 +1,8 @@
-import { useLayoutEffect, useState } from 'react'
-import { Alert, Pressable, StyleSheet, Text, View } from 'react-native'
+import { useEffect, useLayoutEffect, useState } from 'react'
+import { Alert, StyleSheet, Text, View } from 'react-native'
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
+import { useSWRConfig } from 'swr'
 import { useRecoilValue } from 'recoil'
-import { mutate } from 'swr'
 import LoadingSpinner from '../../components/UI/LoadingSpinner'
 import RenderIf from '../../components/UI/RenderIf'
 import { RootStackParams } from '../../Routes/navigators/NativeStack'
@@ -14,15 +14,19 @@ import LeaveMessageInput from './components/LeaveMessageInput/LeaveMessageInput'
 import useGetData from '../../hooks/useGetData'
 import JoinRoomMessage from './components/UI/JoinRoomMessage'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import LeaveChannelBtn from './components/UI/LeaveChannelBtn'
+import UsersBtn from './components/UI/UsersBtn'
+import UsersModal from './components/UsersModal/UsersModal'
 
 type RoomScreenRouteProp = RouteProp<RootStackParams, 'Room'>
 
 const RoomScreen = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [showUsersModal, setShowUsersModal] = useState<boolean>(false)
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParams>>()
   const loggedInUser = useRecoilValue(authUser)
   const accessToken = useRecoilValue(token)
-
+  const { mutate, cache } = useSWRConfig()
   const { params } = useRoute<RoomScreenRouteProp>()
   const allChannels = useRecoilValue<ChannelTypes[] | []>(channels)
 
@@ -48,55 +52,69 @@ const RoomScreen = () => {
       .finally(() => setIsLoading(false))
   }
 
-  useLayoutEffect(() => {
-    mutate('channelMessages')
-  }, [])
-
-  const onPressLeave = () => {
+  const onPressLeave = (userId: number) => {
     setIsLoading(true)
     channelApi
-      .leaveChannel({ roomId: selectedChannel!.id, accessToken: accessToken! })
+      .leaveChannel({ roomId: selectedChannel!.id, userId, accessToken: accessToken! })
       .then(_ => {
         mutate('allChannels')
         mutate('myChannels')
-        navigation.navigate('AllChannels')
+        if (loggedInUser?.id === userId) {
+          navigation.navigate('AllChannels')
+        }
       })
       .catch(error => Alert.alert('Error', error.message))
       .finally(() => setIsLoading(false))
   }
 
   useLayoutEffect(() => {
-    mutate('channelMessages')
-  }, [])
-
-  useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: () => <Text style={styles.headerTitle}>{selectedChannel?.name}</Text>,
       headerRight: () => (
-        <RenderIf isTrue={!!isAlreadyJoined && isNotTheChannelOwner}>
-          <Pressable style={({ pressed }) => pressed && styles.iosPressed} onPress={onPressLeave}>
-            <Text style={styles.headerRightText}>Leave</Text>
-          </Pressable>
-        </RenderIf>
+        <>
+          <RenderIf isTrue={!isNotTheChannelOwner}>
+            <UsersBtn onPressHandler={() => setShowUsersModal(true)} />
+          </RenderIf>
+          <RenderIf isTrue={!!isAlreadyJoined && isNotTheChannelOwner}>
+            <LeaveChannelBtn onPressHandler={() => onPressLeave(loggedInUser?.id!)} />
+          </RenderIf>
+        </>
       ),
     })
   }, [isAlreadyJoined])
 
+  useEffect(() => {
+    mutate('allChannels')
+    mutate('channelMessages')
+  }, [])
+
+  useEffect(() => {
+    return () => {
+      cache.delete('channelMessages')
+    }
+  }, [])
+
   return (
-    <View style={styles.container}>
-      <RenderIf isTrue={isLoading && isMessageLoading}>
-        <LoadingSpinner />
-      </RenderIf>
-      <RenderIf
-        isTrue={!isLoading && !isMessageLoading && !!isAlreadyJoined && selectedChannel !== undefined}
-      >
-        <Messages messages={messages} />
-        <LeaveMessageInput channelId={selectedChannel!.id} />
-      </RenderIf>
-      <RenderIf isTrue={!isLoading && !isMessageLoading && !!!isAlreadyJoined}>
-        <JoinRoomMessage onPressHandler={onPressJoin} />
-      </RenderIf>
-    </View>
+    <>
+      <UsersModal
+        showUsersModal={showUsersModal}
+        setShowUsersModal={setShowUsersModal}
+        selectedChannel={selectedChannel}
+        onRemoveUser={onPressLeave}
+      />
+      <View style={styles.container}>
+        <RenderIf isTrue={isLoading || isMessageLoading}>
+          <LoadingSpinner />
+        </RenderIf>
+        <RenderIf isTrue={!isLoading && !isMessageLoading && !!isAlreadyJoined && !!selectedChannel}>
+          <Messages messages={messages} />
+          <LeaveMessageInput channelId={selectedChannel!.id} />
+        </RenderIf>
+        <RenderIf isTrue={!isLoading && !isMessageLoading && !!!isAlreadyJoined}>
+          <JoinRoomMessage onPressHandler={onPressJoin} />
+        </RenderIf>
+      </View>
+    </>
   )
 }
 
@@ -110,13 +128,5 @@ const styles = StyleSheet.create({
     color: '#fff',
     textTransform: 'capitalize',
     fontSize: 20,
-  },
-  iosPressed: {
-    opacity: 0.5,
-  },
-  headerRightText: {
-    color: '#fff',
-    fontSize: 20,
-    padding: 3,
   },
 })

@@ -1,6 +1,6 @@
 import { FlatList, Alert } from 'react-native'
 import { useRecoilValue } from 'recoil'
-import { mutate } from 'swr'
+import { useSWRConfig } from 'swr'
 import RenderIf from '../../components/UI/RenderIf'
 import LoadingSpinner from '../../components/UI/LoadingSpinner'
 import Channel from './components/Channel'
@@ -11,6 +11,7 @@ import ContentContainer from '../../components/UI/ContentContainer'
 
 const MyChannelsScreen = () => {
   const accessToken = useRecoilValue(token)
+  const { mutate } = useSWRConfig()
   const { data, error, isLoading } = useGetData({ url: '/channels/user-channels', key: 'myChannels' })
 
   const onDeleteChannel = (channelId: number) => {
