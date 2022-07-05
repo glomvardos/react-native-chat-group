@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, useWindowDimensions, Pressable } from 'react-native'
+import { StyleSheet, View, useWindowDimensions, Pressable } from 'react-native'
 import Swipeable from 'react-native-gesture-handler/Swipeable'
 import Colors from '../../../constants/colors'
 import { useNavigation } from '@react-navigation/native'
@@ -6,6 +6,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParams } from '../../../Routes/navigators/NativeStack'
 import stringMethods from '../../../utils/string-methods'
 import SwipeAction from '../../../components/UI/SwipeAction'
+import MyAppText from '../../../components/UI/MyAppText'
 
 interface Props {
   channel: ChannelTypes
@@ -31,9 +32,16 @@ const Channel = ({ channel, onDeleteChannel }: Props) => {
       >
         <View style={styles.container}>
           <View style={styles.textIconContainer}>
-            <Text style={styles.textIcon}>{iconName}</Text>
+            <MyAppText fontWeight='bold' propStyles={styles.textIcon}>
+              {iconName}
+            </MyAppText>
           </View>
-          <Text style={[styles.text, { fontSize: width < 400 ? 17 : 22 }]}>{channel.name.toUpperCase()}</Text>
+          <MyAppText
+            fontWeight='bold'
+            propStyles={{ ...styles.text, ...{ fontSize: width < 400 ? 17 : 22 } }}
+          >
+            {channel.name.toUpperCase()}
+          </MyAppText>
         </View>
       </Swipeable>
     </Pressable>
@@ -65,11 +73,9 @@ const styles = StyleSheet.create({
   textIcon: {
     fontSize: 30,
     color: '#fff',
-    fontWeight: 'bold',
   },
   text: {
     color: '#fff',
-    fontWeight: 'bold',
   },
   swipeContainer: {
     backgroundColor: Colors.error,

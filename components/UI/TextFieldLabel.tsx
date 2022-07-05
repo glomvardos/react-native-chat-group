@@ -1,11 +1,16 @@
-import { StyleSheet, Text } from 'react-native'
+import { StyleSheet } from 'react-native'
+import MyAppText from './MyAppText'
 
 interface Props {
   text: string
 }
 
 const TextFieldLabel = ({ text }: Props) => {
-  return <Text style={styles.text}>{text}</Text>
+  return (
+    <MyAppText fontWeight='bold' propStyles={styles.text}>
+      {text}
+    </MyAppText>
+  )
 }
 
 export default TextFieldLabel
@@ -13,7 +18,6 @@ export default TextFieldLabel
 const styles = StyleSheet.create({
   text: {
     fontSize: 15,
-    fontWeight: '600',
     color: '#fff',
     marginBottom: 5,
   },

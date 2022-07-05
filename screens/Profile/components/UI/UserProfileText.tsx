@@ -1,4 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native'
+import MyAppText from '../../../../components/UI/MyAppText'
 
 interface Props {
   textLeft: string
@@ -8,8 +9,10 @@ interface Props {
 const UserProfileText = ({ textLeft, textRight }: Props) => {
   return (
     <View style={styles.container}>
-      <Text style={[styles.textLeft, styles.text]}>{textLeft}</Text>
-      <Text style={[styles.textRight, styles.text]}>{textRight}</Text>
+      <MyAppText fontWeight='bold' propStyles={{ ...styles.textLeft, ...styles.text }}>
+        {textLeft}
+      </MyAppText>
+      <MyAppText propStyles={styles.text}>{textRight}</MyAppText>
     </View>
   )
 }
@@ -27,7 +30,5 @@ const styles = StyleSheet.create({
   },
   textLeft: {
     width: 120,
-    fontWeight: 'bold',
   },
-  textRight: {},
 })

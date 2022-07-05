@@ -1,4 +1,4 @@
-import { Alert, Pressable, StyleSheet, Text, View } from 'react-native'
+import { Alert, Pressable, StyleSheet, View } from 'react-native'
 import Colors from '../../constants/colors'
 import ContentContainer from '../../components/UI/ContentContainer'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
@@ -7,6 +7,7 @@ import stringMethods from '../../utils/string-methods'
 import UserProfileText from './components/UI/UserProfileText'
 import alertDialogs from '../../utils/alert-dialogs'
 import userApi from '../../services/userApi'
+import MyAppText from '../../components/UI/MyAppText'
 
 const ProfileScreen = () => {
   const logout = useSetRecoilState(clearToken)
@@ -25,7 +26,7 @@ const ProfileScreen = () => {
     <ContentContainer>
       <View style={styles.headerContainer}>
         <View style={styles.userIconContainer}>
-          <Text style={styles.userIconText}>{userInitials}</Text>
+          <MyAppText propStyles={styles.userIconText}>{userInitials}</MyAppText>
         </View>
       </View>
       <View>
@@ -35,7 +36,7 @@ const ProfileScreen = () => {
       </View>
       <View style={styles.footerContainer}>
         <Pressable onPress={() => alertDialogs.confirmDeleteAccount(onDeleteAccount)}>
-          <Text style={styles.deleteAccountButtonText}>Delete Acccount</Text>
+          <MyAppText propStyles={styles.deleteAccountButtonText}>Delete Acccount</MyAppText>
         </Pressable>
       </View>
     </ContentContainer>

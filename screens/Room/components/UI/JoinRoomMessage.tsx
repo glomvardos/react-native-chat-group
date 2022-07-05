@@ -1,4 +1,5 @@
-import { Platform, Pressable, StyleSheet, Text, View } from 'react-native'
+import { Platform, Pressable, StyleSheet, View } from 'react-native'
+import MyAppText from '../../../../components/UI/MyAppText'
 import Colors from '../../../../constants/colors'
 
 interface Props {
@@ -16,7 +17,7 @@ const JoinRoomMessage = ({ onPressHandler }: Props) => {
           pressed ? { opacity: Platform.select({ android: 1, ios: 0.8 }) } : null,
         ]}
       >
-        <Text style={styles.text}>Join Room</Text>
+        <MyAppText propStyles={styles.text}>Join Room</MyAppText>
       </Pressable>
     </View>
   )

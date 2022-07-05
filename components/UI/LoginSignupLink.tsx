@@ -1,7 +1,8 @@
 import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { Pressable, StyleSheet, View } from 'react-native'
 import { RootStackParams } from '../../routes/navigators/NativeStack'
+import MyAppText from './MyAppText'
 
 interface Props {
   text: string
@@ -12,9 +13,9 @@ const LoginSignupLink = ({ text, route }: Props) => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParams>>()
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Don't have an account?</Text>
+      <MyAppText propStyles={styles.text}>{text}</MyAppText>
       <Pressable onPress={() => navigation.navigate(route)}>
-        <Text style={styles.btnText}>{route}</Text>
+        <MyAppText propStyles={styles.btnText}>{route}</MyAppText>
       </Pressable>
     </View>
   )

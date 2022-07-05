@@ -1,5 +1,5 @@
-import { useLayoutEffect, useState } from 'react'
-import { Platform, Pressable, StyleSheet } from 'react-native'
+import { useEffect, useLayoutEffect, useState } from 'react'
+import { Pressable, StyleSheet, View } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 import { Feather } from '@expo/vector-icons'
@@ -8,23 +8,56 @@ import AllChannelsScreen from '../AllChannelsScreen'
 import Colors from '../../../constants/colors'
 import MyChannelsScreen from '../MyChannelsScreen'
 import CreateChannel from './CreateChannel'
+import useGetData from '../../../hooks/useGetData'
+import { useSetRecoilState } from 'recoil'
+import { channels } from '../../../store/channels'
+import Search from '../../../components/Search/Search'
 
 const Tab = createMaterialTopTabNavigator()
 
 const TopTabsNavigation = () => {
+  const setChannels = useSetRecoilState<ChannelTypes[] | []>(channels)
   const [showModal, setShowModal] = useState<boolean>(false)
+  const [searchedAllChannels, setSearchedAllChannels] = useState<ChannelTypes[] | []>([])
+  const [searchedMyChannels, setSearchedMyChannels] = useState<ChannelTypes[] | []>([])
   const navigation = useNavigation()
+
+  const { data: allChannels, isLoading: isAllChannelsLoading }: ChannelsSwrTypes = useGetData({
+    url: '/channels/channels',
+    key: 'allChannels',
+  })
+
+  const { data: myChannels, isLoading: isMyChannelsLoading }: ChannelsSwrTypes = useGetData({
+    url: '/channels/user-channels',
+    key: 'myChannels',
+  })
 
   useLayoutEffect(() => {
     navigation.setOptions({
       title: 'Channels',
       headerRight: () => (
-        <Pressable style={styles.button} onPress={() => setShowModal(prevState => !prevState)}>
-          <Feather name='plus' size={21} color='#fff' />
-        </Pressable>
+        <View style={styles.headerBtnsContainer}>
+          <Search
+            setSearchedAllChannels={setSearchedAllChannels}
+            setSearchedMyChannels={setSearchedMyChannels}
+            allChannels={allChannels}
+            myChannels={myChannels}
+          />
+          <Pressable style={styles.button} onPress={() => setShowModal(prevState => !prevState)}>
+            <Feather name='plus' size={21} color='#fff' />
+          </Pressable>
+        </View>
       ),
     })
-  }, [])
+  }, [allChannels, myChannels])
+
+  useEffect(() => {
+    if (allChannels && myChannels) {
+      setChannels(allChannels)
+      setSearchedAllChannels(allChannels)
+      setSearchedMyChannels(myChannels)
+    }
+  }, [allChannels, myChannels])
 
   return (
     <>
@@ -47,12 +80,20 @@ const TopTabsNavigation = () => {
       >
         <Tab.Screen
           name='AllChannels'
-          component={AllChannelsScreen}
+          children={() => (
+            <AllChannelsScreen isLoading={isAllChannelsLoading} allChannels={searchedAllChannels} />
+          )}
           options={{
             title: 'All Channels',
           }}
         />
-        <Tab.Screen name='MyChannels' component={MyChannelsScreen} options={{ title: 'My Channels' }} />
+        <Tab.Screen
+          name='MyChannels'
+          children={() => (
+            <MyChannelsScreen isLoading={isMyChannelsLoading} myChannels={searchedMyChannels} />
+          )}
+          options={{ title: 'My Channels' }}
+        />
       </Tab.Navigator>
     </>
   )
@@ -61,12 +102,15 @@ const TopTabsNavigation = () => {
 export default TopTabsNavigation
 
 const styles = StyleSheet.create({
+  headerBtnsContainer: {
+    flexDirection: 'row',
+  },
+  inputContainer: {},
   button: {
     backgroundColor: Colors.darkGray,
     borderRadius: 8,
-    width: Platform.select({ android: 27, ios: 29 }),
-    height: Platform.select({ android: 27, ios: 29 }),
-    marginRight: 15,
+    width: 40,
+    marginHorizontal: 15,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',

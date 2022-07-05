@@ -1,23 +1,33 @@
 import { Suspense, useEffect } from 'react'
 import { Text, LogBox, AppState, AppStateStatus } from 'react-native'
+import { SWRConfig } from 'swr'
 import { RecoilRoot } from 'recoil'
 import { StatusBar } from 'expo-status-bar'
 import Routes from './routes/Routes'
 import * as SplashScreen from 'expo-splash-screen'
-import { SWRConfig } from 'swr'
-// import CustomSnackbar from './components/UI/CustomSnackbar'
+import * as Font from 'expo-font'
 
 SplashScreen.preventAutoHideAsync()
-  .then(result => console.log(`SplashScreen.preventAutoHideAsync() succeeded: ${result}`))
-  .catch(console.warn)
+  .then(_ => {})
+  .catch()
+
+const customFonts = {
+  'Lato-Regular': require('./assets/fonts/Lato-Regular.ttf'),
+  'Lato-Bold': require('./assets/fonts/Lato-Bold.ttf'),
+}
 
 LogBox.ignoreLogs(['Setting a timer for a long period of time'])
 
 const App = () => {
-  useEffect(() => {
+  const loadFontAsync = async () => {
+    await Font.loadAsync(customFonts)
     setTimeout(async () => {
       await SplashScreen.hideAsync()
     }, 2000)
+  }
+
+  useEffect(() => {
+    loadFontAsync()
   }, [])
 
   return (
@@ -45,8 +55,8 @@ const App = () => {
       <Suspense fallback={<Text>Loading...</Text>}>
         <RecoilRoot>
           <StatusBar style='light' />
+
           <Routes />
-          {/* <CustomSnackbar /> */}
         </RecoilRoot>
       </Suspense>
     </SWRConfig>

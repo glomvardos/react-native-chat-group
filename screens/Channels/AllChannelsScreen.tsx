@@ -1,32 +1,25 @@
 import { FlatList } from 'react-native'
-import { useEffect } from 'react'
-import { useSetRecoilState } from 'recoil'
-import useGetData from '../../hooks/useGetData'
 import RenderIf from '../../components/UI/RenderIf'
 import LoadingSpinner from '../../components/UI/LoadingSpinner'
 import Channel from './components/Channel'
-import { channels } from '../../store/channels'
 import ContentContainer from '../../components/UI/ContentContainer'
 
-const AllChannelsScreen = () => {
-  const setChannels = useSetRecoilState<ChannelTypes[] | []>(channels)
-  const { data, error, isLoading } = useGetData({ url: '/channels/channels', key: 'allChannels' })
+interface Props {
+  allChannels: ChannelTypes[]
+  isLoading: boolean
+}
 
-  useEffect(() => {
-    if (data) {
-      setChannels(data)
-    }
-  }, [data])
+const AllChannelsScreen = ({ isLoading, allChannels = [] }: Props) => {
   return (
     <ContentContainer paddingRight={0}>
       <RenderIf isTrue={isLoading}>
         <LoadingSpinner />
       </RenderIf>
-      <RenderIf isTrue={!isLoading && data}>
+      <RenderIf isTrue={!isLoading && allChannels !== undefined}>
         <FlatList
           bounces={false}
-          data={data}
-          keyExtractor={item => item.id}
+          data={allChannels}
+          keyExtractor={item => item.id.toString()}
           renderItem={({ item }) => <Channel channel={item} />}
         />
       </RenderIf>

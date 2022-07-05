@@ -1,11 +1,12 @@
-import { View, Text, StyleSheet } from 'react-native'
+import { StyleSheet } from 'react-native'
+import MyAppText from './MyAppText'
 
 interface Props {
   text: string
 }
 
 const TextTitle = ({ text }: Props) => {
-  return <Text style={styles.text}>{text}</Text>
+  return <MyAppText propStyles={styles.text}>{text}</MyAppText>
 }
 
 export default TextTitle

@@ -1,7 +1,7 @@
 import { useFormik } from 'formik'
 import { useState } from 'react'
 import { useSWRConfig } from 'swr'
-import { Alert, Modal, Pressable, StyleSheet, Text } from 'react-native'
+import { Alert, Modal, Pressable, StyleSheet } from 'react-native'
 import { useRecoilValue } from 'recoil'
 import Colors from '../../../constants/colors'
 import channelApi from '../../../services/channelApi'
@@ -9,6 +9,7 @@ import { token } from '../../../store/auth'
 import validationSchema from '../../../utils/validation-schema'
 import Button from '../../../components/UI/Button'
 import TextField from '../../../components/UI/TextField'
+import MyAppText from '../../../components/UI/MyAppText'
 
 interface Props {
   showModal: boolean
@@ -44,7 +45,7 @@ const CreateChannel = ({ showModal, setShowModal }: Props) => {
     <Modal animationType='fade' visible={showModal} transparent={true} onRequestClose={() => {}}>
       <Pressable style={styles.centeredView} onPress={() => setShowModal(false)}>
         <Pressable style={styles.modalView}>
-          <Text style={styles.text}>Create Channel</Text>
+          <MyAppText propStyles={styles.text}>Create Channel</MyAppText>
           <TextField
             placeholder='Channel name'
             onChangeText={formik.handleChange('name')}

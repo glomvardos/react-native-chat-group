@@ -1,5 +1,6 @@
-import { Text, Pressable, StyleSheet, View, Platform, ActivityIndicator } from 'react-native'
+import { Pressable, StyleSheet, View, Platform, ActivityIndicator } from 'react-native'
 import Colors from '../../constants/colors'
+import MyAppText from './MyAppText'
 
 interface Props {
   text: string
@@ -14,7 +15,9 @@ const Button = ({ text, isLoading, onPressHandler }: Props) => {
         {isLoading ? (
           <ActivityIndicator size='small' color='#fff' />
         ) : (
-          <Text style={styles.text}>{text}</Text>
+          <MyAppText fontWeight='bold' propStyles={styles.text}>
+            {text}
+          </MyAppText>
         )}
       </Pressable>
     </View>
@@ -39,7 +42,6 @@ const styles = StyleSheet.create({
   text: {
     textAlign: 'center',
     fontSize: 17,
-    fontWeight: '700',
     color: '#fff',
   },
 })

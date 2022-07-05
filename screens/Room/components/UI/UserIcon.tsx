@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { StyleSheet, View } from 'react-native'
+import MyAppText from '../../../../components/UI/MyAppText'
 import Colors from '../../../../constants/colors'
 import stringMethods from '../../../../utils/string-methods'
 
@@ -21,7 +21,7 @@ const UserIcon = ({ text, isMessageFromMe, marginBottom }: Props) => {
 
   return (
     <View style={[styles.userIconContainer, transformStyle]}>
-      <Text style={styles.userIconText}>{userInitials}</Text>
+      <MyAppText propStyles={styles.userIconText}>{userInitials}</MyAppText>
     </View>
   )
 }

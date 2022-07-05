@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text } from 'react-native'
+import { Pressable, StyleSheet } from 'react-native'
 import { FontAwesome5 } from '@expo/vector-icons'
 
 interface Props {

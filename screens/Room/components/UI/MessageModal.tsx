@@ -1,4 +1,5 @@
-import { Modal, Pressable, StyleSheet, Text, View } from 'react-native'
+import { Modal, Pressable, StyleSheet } from 'react-native'
+import MyAppText from '../../../../components/UI/MyAppText'
 import Colors from '../../../../constants/colors'
 
 interface Props {
@@ -14,7 +15,7 @@ const MessageModal = ({ showModal, setShowModal }: Props) => {
           <Pressable></Pressable>
           <Pressable></Pressable>
           <Pressable>
-            <Text>Cancel</Text>
+            <MyAppText>Cancel</MyAppText>
           </Pressable>
         </Pressable>
       </Pressable>

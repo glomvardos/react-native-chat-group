@@ -18,6 +18,7 @@ interface Props {
 const LeaveMessageInput = ({ channelId }: Props) => {
   const accessToken = useRecoilValue(token)
   const headerHeight = useHeaderHeight()
+
   const { mutate } = useSWRConfig()
   const formik = useFormik({
     initialValues: {
@@ -30,7 +31,7 @@ const LeaveMessageInput = ({ channelId }: Props) => {
         .then(_ => {
           formik.resetForm()
           Keyboard.dismiss()
-          mutate('channelMessages')
+          mutate(`channelMessages-${channelId}')}`)
         })
         .catch(error => Alert.alert('Error', error.message))
     },

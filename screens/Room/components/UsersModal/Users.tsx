@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet } from 'react-native'
+import { ScrollView } from 'react-native'
 import User from './User'
 
 interface Props {
@@ -15,5 +15,3 @@ const Users = ({ selectedChannel, onRemoveUser }: Props) => {
 }
 
 export default Users
-
-const styles = StyleSheet.create({})

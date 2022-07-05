@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useState } from 'react'
-import { Alert, StyleSheet, Text, View } from 'react-native'
+import { Alert, StyleSheet, View } from 'react-native'
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import { useSWRConfig } from 'swr'
 import { useRecoilValue } from 'recoil'
@@ -17,6 +17,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import LeaveChannelBtn from './components/UI/LeaveChannelBtn'
 import UsersBtn from './components/UI/UsersBtn'
 import UsersModal from './components/UsersModal/UsersModal'
+import MyAppText from '../../components/UI/MyAppText'
 
 type RoomScreenRouteProp = RouteProp<RootStackParams, 'Room'>
 
@@ -26,7 +27,7 @@ const RoomScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParams>>()
   const loggedInUser = useRecoilValue(authUser)
   const accessToken = useRecoilValue(token)
-  const { mutate, cache } = useSWRConfig()
+  const { mutate } = useSWRConfig()
   const { params } = useRoute<RoomScreenRouteProp>()
   const allChannels = useRecoilValue<ChannelTypes[] | []>(channels)
 
@@ -34,11 +35,10 @@ const RoomScreen = () => {
   const isAlreadyJoined = selectedChannel?.users.some(user => user.id === loggedInUser?.id)
   const isNotTheChannelOwner = selectedChannel?.channelOwner !== loggedInUser?.id
 
-  const {
-    data: messages,
-    error,
-    isLoading: isMessageLoading,
-  } = useGetData({ key: 'channelMessages', url: `/messages/channel-messages/${selectedChannel?.id}` })
+  const { data: messages, isLoading: isMessageLoading } = useGetData({
+    key: `channelMessages-${selectedChannel?.id}`,
+    url: `/messages/channel-messages/${selectedChannel?.id}`,
+  })
 
   const onPressJoin = () => {
     setIsLoading(true)
@@ -69,7 +69,7 @@ const RoomScreen = () => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: () => <Text style={styles.headerTitle}>{selectedChannel?.name}</Text>,
+      headerTitle: () => <MyAppText propStyles={styles.headerTitle}>{selectedChannel?.name}</MyAppText>,
       headerRight: () => (
         <>
           <RenderIf isTrue={!isNotTheChannelOwner}>
@@ -85,13 +85,6 @@ const RoomScreen = () => {
 
   useEffect(() => {
     mutate('allChannels')
-    mutate('channelMessages')
-  }, [])
-
-  useEffect(() => {
-    return () => {
-      cache.delete('channelMessages')
-    }
   }, [])
 
   return (

@@ -8,6 +8,7 @@ import RenderIf from '../../../../components/UI/RenderIf'
 import Colors from '../../../../constants/colors'
 import alertDialogs from '../../../../utils/alert-dialogs'
 import stringMethods from '../../../../utils/string-methods'
+import MyAppText from '../../../../components/UI/MyAppText'
 
 interface Props {
   user: ChannelTypes['users'][0] | undefined
@@ -26,9 +27,11 @@ const User = ({ user, roomName, onRemoveUser }: Props) => {
     <View style={styles.container}>
       <View style={styles.innerContainer}>
         <UserIcon text={`${user?.firstName} ${user?.lastName}`} />
-        <Text style={[styles.text, { marginHorizontal: 8 }]}>{`${user?.firstName} ${user?.lastName}`}</Text>
+        <MyAppText
+          propStyles={{ ...styles.text, ...{ marginHorizontal: 8 } }}
+        >{`${user?.firstName} ${user?.lastName}`}</MyAppText>
         <RenderIf isTrue={isTheLoggedInUser}>
-          <Text style={styles.text}>(you)</Text>
+          <MyAppText propStyles={styles.text}>(you)</MyAppText>
         </RenderIf>
       </View>
       <RenderIf isTrue={!isTheLoggedInUser && !!user?.id}>

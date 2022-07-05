@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Alert, StyleSheet, Text, View } from 'react-native'
+import { Alert, StyleSheet, View } from 'react-native'
 import { Swipeable, GestureHandlerRootView, TextInput } from 'react-native-gesture-handler'
 import { useRecoilValue } from 'recoil'
 import moment from 'moment'
@@ -11,6 +11,7 @@ import messageApi from '../../../../services/messageApi'
 import alertDialogs from '../../../../utils/alert-dialogs'
 import UserIcon from '../UI/UserIcon'
 import { useSWRConfig } from 'swr'
+import MyAppText from '../../../../components/UI/MyAppText'
 
 interface Props {
   message: MessageTypes
@@ -35,7 +36,7 @@ const Message = ({ message, marginBottom, index, setScrollIndex }: Props) => {
     messageApi
       .deleteMessage({ messageId: message.id, accessToken: accessToken! })
       .then(_ => {
-        mutate('channelMessages')
+        mutate(`channelMessages-${message.channelId}`)
       })
       .catch(error => {
         Alert.alert('Error', error.message)
@@ -62,7 +63,7 @@ const Message = ({ message, marginBottom, index, setScrollIndex }: Props) => {
       messageApi
         .editMessage({ messageId: message.id, message: messageValue, accessToken: accessToken! })
         .then(_ => {
-          mutate('channelMessages')
+          mutate(`channelMessages-${message.channelId}`)
         })
         .catch(error => {
           Alert.alert('Error', error.message)
@@ -106,7 +107,7 @@ const Message = ({ message, marginBottom, index, setScrollIndex }: Props) => {
 
           <View style={styles.messageContainer}>
             <RenderIf isTrue={!isMessageFromMe}>
-              <Text style={styles.messageFromText}>{message.user.firstName}</Text>
+              <MyAppText propStyles={styles.messageFromText}>{message.user.firstName}</MyAppText>
             </RenderIf>
             <View
               style={[
@@ -127,9 +128,9 @@ const Message = ({ message, marginBottom, index, setScrollIndex }: Props) => {
                 editable={isEdit}
                 autoFocus={true}
               />
-              <Text style={styles.messageDateText}>
+              <MyAppText propStyles={styles.messageDateText}>
                 {moment(message.createdAt).format('DD/MM/YY - HH:mm')}
-              </Text>
+              </MyAppText>
             </View>
           </View>
         </View>

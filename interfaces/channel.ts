@@ -13,6 +13,11 @@ interface ChannelSwrTypes {
   error: Error
   isLoading: boolean
 }
+interface ChannelsSwrTypes {
+  data: ChannelTypes[] | []
+  error: Error
+  isLoading: boolean
+}
 
 interface CreateChannelTypes extends TokenType {
   channelName: string

@@ -1,4 +1,5 @@
-import { Pressable, StyleSheet, Text } from 'react-native'
+import { Pressable, StyleSheet } from 'react-native'
+import MyAppText from '../../../../components/UI/MyAppText'
 
 interface Props {
   onPressHandler: () => void
@@ -7,7 +8,7 @@ interface Props {
 const LeaveChannelBtn = ({ onPressHandler }: Props) => {
   return (
     <Pressable style={({ pressed }) => pressed && styles.iosPressed} onPress={onPressHandler}>
-      <Text style={styles.headerRightText}>Leave</Text>
+      <MyAppText propStyles={styles.headerRightText}>Leave</MyAppText>
     </Pressable>
   )
 }

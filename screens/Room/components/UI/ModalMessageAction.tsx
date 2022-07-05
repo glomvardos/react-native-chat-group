@@ -1,4 +1,5 @@
-import { Pressable, StyleSheet, Text } from 'react-native'
+import { Pressable, StyleSheet } from 'react-native'
+import MyAppText from '../../../../components/UI/MyAppText'
 
 interface Props {
   onPressHandler: () => void
@@ -7,7 +8,7 @@ interface Props {
 const ModalMessageAction = ({ onPressHandler }: Props) => {
   return (
     <Pressable onPress={onPressHandler}>
-      <Text>Cancel</Text>
+      <MyAppText>Cancel</MyAppText>
     </Pressable>
   )
 }

@@ -4,15 +4,18 @@ import { useSWRConfig } from 'swr'
 import RenderIf from '../../components/UI/RenderIf'
 import LoadingSpinner from '../../components/UI/LoadingSpinner'
 import Channel from './components/Channel'
-import useGetData from '../../hooks/useGetData'
 import channelApi from '../../services/channelApi'
 import { token } from '../../store/auth'
 import ContentContainer from '../../components/UI/ContentContainer'
 
-const MyChannelsScreen = () => {
+interface Props {
+  myChannels: ChannelTypes[]
+  isLoading: boolean
+}
+
+const MyChannelsScreen = ({ myChannels = [], isLoading }: Props) => {
   const accessToken = useRecoilValue(token)
   const { mutate } = useSWRConfig()
-  const { data, error, isLoading } = useGetData({ url: '/channels/user-channels', key: 'myChannels' })
 
   const onDeleteChannel = (channelId: number) => {
     channelApi
@@ -31,15 +34,14 @@ const MyChannelsScreen = () => {
       <RenderIf isTrue={isLoading}>
         <LoadingSpinner />
       </RenderIf>
-      <RenderIf isTrue={!isLoading && data}>
+      <RenderIf isTrue={!isLoading && myChannels !== undefined}>
         <FlatList
           bounces={false}
-          data={data}
-          keyExtractor={item => item.id}
+          data={myChannels}
+          keyExtractor={item => item.id.toString()}
           renderItem={({ item }) => <Channel channel={item} onDeleteChannel={onDeleteChannel} />}
         />
       </RenderIf>
-      {/* <RenderIf isTrue={!isLoading && error}></RenderIf> */}
     </ContentContainer>
   )
 }
