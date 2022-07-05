@@ -4,12 +4,12 @@
 
 - [Table of Contents](#table-of-contents)
 - [Overview](#overview)
-- [Built With](#built-with)
+  - [Built With](#built-with)
 - [How To Use](#how-to-use)
 
 ## Overview
 
-I used React Native and NestJS to create this project. This project is a chat group application which you can create room and chat with other people who are also members of the room.
+I used React Native and NestJS to create this project. This project is a chat group application which you can create a room and chat with other people who are also members of the room.
 
 - You can register/login
 - You can create/delete a room
